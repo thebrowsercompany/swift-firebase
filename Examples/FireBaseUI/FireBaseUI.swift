@@ -32,7 +32,6 @@ final class FireBaseUI: ApplicationDelegate {
       fatalError("Unable to create options from JSON file!")
     }
 
-    FirebaseConfiguration.shared.setLoggerLevel(.verbose)
     FirebaseApp.configure(options: options)
     return true
   }
