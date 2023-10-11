@@ -27,7 +27,13 @@ final class FireBaseUI: ApplicationDelegate {
     Bundle.resources.withUnsafeFileSystemRepresentation(firebase.App.SetDefaultConfigPath)
 #endif
 
-    FirebaseApp.configure()
+    let path = Bundle.resources.appendingPathComponent("google-services.json")
+    guard let options = FirebaseOptions(_contentsOfFile: path.path, format: .json) else {
+      fatalError("Unable to create options from JSON file!")
+    }
+
+    FirebaseConfiguration.shared.setLoggerLevel(.verbose)
+    FirebaseApp.configure(options: options)
     return true
   }
 }
