@@ -138,18 +138,19 @@ extension FirebaseOptions {
   /// - Parameters:
   ///   - path: The path where the config file can be found.
   ///   - format: A format which describes how the content of the file should be treated.
-  public init?(_contentsOfFile path: String, format: ConfigFormat) {
-    switch format {
-      case .json:
-        do {
-          let config = try String(contentsOfFile: path)
+  public init?(_contentsOfFile path: URL, format: ConfigFormat) {
+    do {
+      let data = try Data(contentsOf: path)
+      switch format {
+        case .json:
+          let config = String(data: data, encoding: .utf8)
           guard let options = firebase.AppOptions.LoadFromJsonConfig(config, nil) else {
             return nil
           }
           self = options
-        } catch {
-          return nil
-        }
+      }
+    } catch {
+      return nil
     }
   }
 }
