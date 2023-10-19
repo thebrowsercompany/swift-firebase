@@ -2,14 +2,8 @@
 
 import Foundation
 
-public struct AuthError {
-}
-
-extension AuthError: Error {
-}
-
-extension AuthError {
-  public enum Code: Int {
+public struct AuthErrorCode: Error {
+  public enum FIRAuthErrorCode: Int {
     case invalidCustomToken = 17000
     case customTokenMismatch = 17002
     case invalidCredential = 17004
@@ -90,5 +84,11 @@ extension AuthError {
     case keychainError = 17995
     case internalError = 17999
     case malformedJWT = 18000
+  }
+
+  public var code: FIRAuthErrorCode
+
+  public init(code: FIRAuthErrorCode) {
+    self.code = code
   }
 }
