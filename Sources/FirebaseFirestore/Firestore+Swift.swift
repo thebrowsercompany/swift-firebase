@@ -39,43 +39,38 @@ extension Firestore {
 // An extension that adds the encoder and decoder functions required
 // to serialize and deserialize documents in Firebase. These are mostly
 // copy of the Swift implementation that's available within firebase-ios-sdk
-//
 public extension Firestore {
-    class Encoder {
-      public var dateEncodingStrategy: FirebaseDataEncoder.DateEncodingStrategy = .timestamp
-      public var dataEncodingStrategy: FirebaseDataEncoder.DataEncodingStrategy = .blob
+  class Encoder {
+    public var dateEncodingStrategy: FirebaseDataEncoder.DateEncodingStrategy = .timestamp
+    public var dataEncodingStrategy: FirebaseDataEncoder.DataEncodingStrategy = .blob
+    public var nonConformingFloatEncodingStrategy: FirebaseDataEncoder.NonConformingFloatEncodingStrategy = .throw
+    public var keyEncodingStrategy: FirebaseDataEncoder.KeyEncodingStrategy = .useDefaultKeys
+    public var userInfo: [CodingUserInfoKey: Any] = [:]
 
-      public var nonConformingFloatEncodingStrategy: FirebaseDataEncoder
-        .NonConformingFloatEncodingStrategy = .throw
+    public func encode<T: Encodable>(_ value: T) throws -> [String: Any] {
+      let encoder = FirebaseDataEncoder()
+      // Configure the encoder to the set values
+      encoder.dateEncodingStrategy = dateEncodingStrategy
+      encoder.dataEncodingStrategy = dataEncodingStrategy
+      encoder.nonConformingFloatEncodingStrategy = nonConformingFloatEncodingStrategy
+      encoder.keyEncodingStrategy = keyEncodingStrategy
+      encoder.passthroughTypeResolver = FirestorePassthroughTypes.self
+      encoder.userInfo = userInfo
 
-      public var keyEncodingStrategy: FirebaseDataEncoder.KeyEncodingStrategy = .useDefaultKeys
-
-      public var userInfo: [CodingUserInfoKey: Any] = [:]
-
-      public func encode<T: Encodable>(_ value: T) throws -> [String: Any] {
-        let encoder = FirebaseDataEncoder()
-        // Configure the encoder to the set values
-        encoder.dateEncodingStrategy = dateEncodingStrategy
-        encoder.dataEncodingStrategy = dataEncodingStrategy
-        encoder.nonConformingFloatEncodingStrategy = nonConformingFloatEncodingStrategy
-        encoder.keyEncodingStrategy = keyEncodingStrategy
-        encoder.passthroughTypeResolver = FirestorePassthroughTypes.self
-        encoder.userInfo = userInfo
-
-        // Decode the document correctly, or throw an error describing
-        // what sort of bad thing has happened.
-        let encoded = try encoder.encode(value)
-        guard let dictionaryValue = encoded as? [String: Any] else {
-          throw EncodingError
-            .invalidValue(value,
-                          EncodingError.Context(codingPath: [],
-                                                debugDescription: "Top-level \(T.self) is not allowed."))
-        }
-        return dictionaryValue
+      // Decode the document correctly, or throw an error describing
+      // what sort of bad thing has happened.
+      let encoded = try encoder.encode(value)
+      guard let dictionaryValue = encoded as? [String: Any] else {
+        throw EncodingError
+          .invalidValue(value,
+                        EncodingError.Context(codingPath: [],
+                                              debugDescription: "Top-level \(T.self) is not allowed."))
       }
+      return dictionaryValue
+    }
 
-      public init() {}
-  }
+    public init() {}
+}
 
   class Decoder {
     public var dateDecodingStrategy: FirebaseDataDecoder.DateDecodingStrategy = .timestamp
@@ -95,8 +90,7 @@ public extension Firestore {
       return try decoder.decode(t, from: data)
     }
 
-    public func decode<T: Decodable>(_ t: T.Type, from data: Any,
-                                     in reference: DocumentReference?) throws -> T {
+    public func decode<T: Decodable>(_ t: T.Type, from data: Any, in reference: DocumentReference?) throws -> T {
       if let reference = reference {
         userInfo[CodingUserInfoKey.documentRefUserInfoKey] = reference
       }

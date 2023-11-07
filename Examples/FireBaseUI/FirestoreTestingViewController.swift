@@ -84,7 +84,7 @@ internal final class FirestoreTestingViewController: ViewController {
     subscription = Firestore.firestore().document(path).addSnapshotListener { [weak self] snapshot, errorCode, errorMessage  in
       Task { [weak self] in
         let data = snapshot?.data(with: .none)
-        await self?.displayData(data: String(describing:dump(data)))
+        await self?.displayData(data: String(describing: dump(data)))
       }
     }
   }

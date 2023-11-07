@@ -8,10 +8,11 @@ import FirebaseCore
 import CxxShim
 import Foundation
 
+private typealias MapFieldValue = firebase.firestore.MapFieldValue
+
+// Expose these types as public to better match the types available from the Cocoa SDK.
 public typealias DocumentSnapshot = firebase.firestore.DocumentSnapshot
 public typealias ServerTimestampBehavior = firebase.firestore.DocumentSnapshot.ServerTimestampBehavior
-public typealias MapFieldValue = firebase.firestore.MapFieldValue
-
 public typealias GeoPoint = firebase.firestore.GeoPoint
 public typealias FieldValue = firebase.firestore.FieldValue
 
@@ -27,10 +28,10 @@ extension DocumentSnapshot {
   }
 }
 
-public extension DocumentSnapshot {
-    func data<T: Decodable>(as type: T.Type,
-                            with serverTimestampBehavior: ServerTimestampBehavior = .none,
-                            decoder: Firestore.Decoder =  .init()) throws -> T {
+extension DocumentSnapshot {
+  public func data<T: Decodable>(as type: T.Type,
+                                with serverTimestampBehavior: ServerTimestampBehavior = .none,
+                                decoder: Firestore.Decoder =  .init()) throws -> T {
     let value: Any = data(with: serverTimestampBehavior) ?? NSNull()
     let result = try decoder.decode(T.self, from: value, in: reference)
 

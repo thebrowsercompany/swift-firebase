@@ -100,7 +100,7 @@ internal protocol DocumentIDProtocol {
 ///   write it into another without adjusting the value here.
 @propertyWrapper
 public struct DocumentID<Value: DocumentIDWrappable & Codable>:
-  StructureCodingUncodedUnkeyed {
+    StructureCodingUncodedUnkeyed {
   private var value: Value? = nil
 
   public init(wrappedValue value: Value?) {
