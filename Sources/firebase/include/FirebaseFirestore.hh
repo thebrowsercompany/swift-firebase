@@ -61,10 +61,11 @@ map_field_value_to_workaround(const ::firebase::firestore::MapFieldValue value) 
   data.keys.reserve(value.size());
   data.values.reserve(value.size());
 
-  for (auto i = value.begin(); i != value.end(); i++) {
-    data.keys.emplace_back(i->first);
-    data.values.emplace_back(i->second);
+  for (const auto &kv : value) {
+    data.keys.emplace_back(kv.first);
+    data.values.emplace_back(kv.second);
   }
+
   return std::move(data);
 }
 
