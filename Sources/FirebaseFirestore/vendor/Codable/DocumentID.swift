@@ -177,5 +177,4 @@ extension DocumentID: Codable {
 }
 
 extension DocumentID: Equatable where Value: Equatable {}
-
 extension DocumentID: Hashable where Value: Hashable {}

@@ -26,7 +26,7 @@ struct FirestoreDataConverter {
       case .double:
       return field.double_value()
       case .timestamp:
-      return nil
+      return field.timestamp_value()
       case .string:
       return String(field.string_value())
       case .blob:

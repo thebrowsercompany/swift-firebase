@@ -82,9 +82,7 @@ let SwiftFirebase =
                         .unsafeFlags([
                           "-Lthird_party/firebase-development/usr/libs/windows",
                           "-Lthird_party/firebase-development/usr/libs/windows/deps/app",
-                          "-Lthird_party/firebase-development/usr/libs/windows/deps/app/external",
-                          "-Xlinker",
-                          "-ignore:4217"
+                          "-Lthird_party/firebase-development/usr/libs/windows/deps/app/external"
                         ]),
                         .linkedLibrary("absl_bad_optional_access"),
                         .linkedLibrary("absl_bad_variant_access"),
