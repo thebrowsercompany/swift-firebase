@@ -22,7 +22,7 @@ extension DocumentSnapshot {
   }
 
   public func data(with behavior: ServerTimestampBehavior) -> [String: Any]? {
-    let data = swift_firebase.swift_cxx_shims.firebase.firestore.snapshot_get_data(self, behavior)
+    let data = swift_firebase.swift_cxx_shims.firebase.firestore.snapshot_get_data_workaround(self, behavior)
 
     return FirestoreDataConverter.value(workaround: data)
   }

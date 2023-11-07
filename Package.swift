@@ -70,6 +70,7 @@ let SwiftFirebase =
                         "vendor/LICENSE"
                       ],
                       cxxSettings: [
+                        .define("SR69711"),
                         .define("INTERNAL_EXPERIMENTAL"),
                         .define("_CRT_SECURE_NO_WARNINGS",
                                 .when(platforms: [.windows])),
@@ -82,7 +83,7 @@ let SwiftFirebase =
                         .unsafeFlags([
                           "-Lthird_party/firebase-development/usr/libs/windows",
                           "-Lthird_party/firebase-development/usr/libs/windows/deps/app",
-                          "-Lthird_party/firebase-development/usr/libs/windows/deps/app/external"
+                          "-Lthird_party/firebase-development/usr/libs/windows/deps/app/external",
                         ]),
                         .linkedLibrary("absl_bad_optional_access"),
                         .linkedLibrary("absl_bad_variant_access"),
