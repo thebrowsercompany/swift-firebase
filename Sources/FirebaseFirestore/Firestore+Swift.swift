@@ -39,8 +39,16 @@ extension Firestore {
 // An extension that adds the encoder and decoder functions required
 // to serialize and deserialize documents in Firebase. These are mostly
 // copy of the Swift implementation that's available within firebase-ios-sdk
-public extension Firestore {
-  class Encoder {
+//
+// The `FirebaseDataDecoder` is a heavily forked version of the Swift JSONEncoder/Decoder
+// this extension creates classes that can be configured in a similar fashion to the standard
+// encoder/decoders but with Firebase specific options like for data encoding, extended
+// date format options, etc.
+//
+// We are re-exposing these to maximize compatibility with existing Firestore API that might
+// depend on these being the same access level and shape.
+extension Firestore {
+  public class Encoder {
     public var dateEncodingStrategy: FirebaseDataEncoder.DateEncodingStrategy = .timestamp
     public var dataEncodingStrategy: FirebaseDataEncoder.DataEncodingStrategy = .blob
     public var nonConformingFloatEncodingStrategy: FirebaseDataEncoder.NonConformingFloatEncodingStrategy = .throw
@@ -70,9 +78,9 @@ public extension Firestore {
     }
 
     public init() {}
-}
+  }
 
-  class Decoder {
+  public class Decoder {
     public var dateDecodingStrategy: FirebaseDataDecoder.DateDecodingStrategy = .timestamp
     public var dataDecodingStrategy: FirebaseDataDecoder.DataDecodingStrategy = .blob
     public var nonConformingFloatDecodingStrategy: FirebaseDataDecoder.NonConformingFloatDecodingStrategy = .throw
@@ -101,8 +109,8 @@ public extension Firestore {
   }
 }
 
-public extension FirebaseDataEncoder.DateEncodingStrategy {
-  static var timestamp: FirebaseDataEncoder.DateEncodingStrategy {
+extension FirebaseDataEncoder.DateEncodingStrategy {
+  public static var timestamp: FirebaseDataEncoder.DateEncodingStrategy {
     return .custom { date, encoder in
       var container = encoder.singleValueContainer()
       try container.encode(Timestamp(date: date))
@@ -110,8 +118,8 @@ public extension FirebaseDataEncoder.DateEncodingStrategy {
   }
 }
 
-public extension FirebaseDataDecoder.DateDecodingStrategy {
-  static var timestamp: FirebaseDataDecoder.DateDecodingStrategy {
+extension FirebaseDataDecoder.DateDecodingStrategy {
+  public static var timestamp: FirebaseDataDecoder.DateDecodingStrategy {
     return .custom { decoder in
       let container = try decoder.singleValueContainer()
       let value = try container.decode(Timestamp.self)
