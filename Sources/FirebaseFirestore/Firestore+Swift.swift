@@ -45,7 +45,7 @@ extension Firestore {
 // encoder/decoders but with Firebase specific options like for data encoding, extended
 // date format options, etc.
 //
-// We are re-exposing these to maximize compatibility with existing Firestore API that might
+// We are re-exposing these to maximize compatibility with existing Firestore APIs that might
 // depend on these being the same access level and shape.
 extension Firestore {
   public class Encoder {
