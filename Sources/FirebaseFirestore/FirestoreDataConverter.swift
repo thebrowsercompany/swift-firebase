@@ -5,10 +5,10 @@ struct FirestoreDataConverter {
   static func value(workaround: swift_firebase.swift_cxx_shims.firebase.firestore.MapFieldValue_Workaround) -> [String: Any]? {
     guard workaround.keys.size() == workaround.values.size() else { return nil }
 
-return Dictionary(uniqueKeysWithValues: workaround.lazy.compactMap {
-  guard let converted = FirestoreDataConverter.value(field: $0.value) else { return nil }
-  return (key: String($0.key), value: converted)
-})
+    return Dictionary(uniqueKeysWithValues: zip(workaround.keys, workaround.values).lazy.compactMap {
+      guard let converted = FirestoreDataConverter.value(field: $0.1) else { return nil }
+      return (key: String($0.0), value: converted)
+    })
   }
 
   static func value(field: firebase.firestore.FieldValue) -> Any? {
