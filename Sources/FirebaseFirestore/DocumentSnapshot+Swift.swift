@@ -23,18 +23,16 @@ extension DocumentSnapshot {
 
   public func data(with behavior: ServerTimestampBehavior) -> [String: Any]? {
     let data = swift_firebase.swift_cxx_shims.firebase.firestore.snapshot_get_data_workaround(self, behavior)
-
     return FirestoreDataConverter.value(workaround: data)
   }
 }
 
 extension DocumentSnapshot {
   public func data<T: Decodable>(as type: T.Type,
-                                with serverTimestampBehavior: ServerTimestampBehavior = .none,
-                                decoder: Firestore.Decoder =  .init()) throws -> T {
+                                 with serverTimestampBehavior: ServerTimestampBehavior = .none,
+                                 decoder: Firestore.Decoder =  .init()) throws -> T {
     let value: Any = data(with: serverTimestampBehavior) ?? NSNull()
     let result = try decoder.decode(T.self, from: value, in: reference)
-
     return result
   }
 }
