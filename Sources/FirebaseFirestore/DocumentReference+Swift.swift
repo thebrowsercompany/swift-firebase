@@ -64,6 +64,34 @@ extension DocumentReference {
 
     return ListenerRegistration(boxed, instance)
   }
+
+  public func setData(_ data: [String: Any]) async throws -> Void {
+    try await setData(data, merge: false)
+  }
+
+  public func setData(_ data: [String: Any], merge: Bool) async throws -> Void {
+    let converted = FirestoreDataConverter.firestoreValue(document: data)
+    let options = merge ? firebase.firestore.SetOptions.Merge() : firebase.firestore.SetOptions()
+
+    typealias Promise = CheckedContinuation<Void, any Error>
+    let dataResponse: Void = try await withCheckedThrowingContinuation { (continuation: Promise) in
+      let future = swift_firebase.swift_cxx_shims.firebase.firestore.document_set_data(self, converted, options)
+      withUnsafePointer(to: continuation) { continuation in
+        future.OnCompletion_SwiftWorkaround({ future, pvContinuation in
+          let pContinuation = pvContinuation?.assumingMemoryBound(to: Promise.self)
+          // Since this returns void, we only need to care about the error state
+          if future.pointee.error() != 0 {
+            let code = future.pointee.error()
+            let message = String(cString: future.pointee.__error_messageUnsafe()!)
+            pContinuation.pointee.resume(throwing: FirebaseError(code: code, message: message))
+          }
+        }, UnsafeMutableRawPointer(mutating: continuation))
+
+        future.Wait(firebase.FutureBase.kWaitTimeoutInfinite)
+      }
+    }
+    return dataResponse
+  }
 }
 
 extension DocumentReference: CustomDebugStringConvertible {
