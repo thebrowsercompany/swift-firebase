@@ -93,9 +93,9 @@ internal struct FirestoreDataConverter {
       guard let array = field as? Array<Any> else { return nil }
       var vector = swift_firebase.swift_cxx_shims.firebase.firestore.FirestoreFieldValues()
 
-      for thing in array {
-        guard let item = firestoreValue(field: thing) else { continue }
-        vector.push_back(item)
+      for element in array {
+        guard let value = firestoreValue(field: element) else { continue }
+        vector.push_back(value)
       }
 
       return firebase.firestore.FieldValue.Array(vector)
