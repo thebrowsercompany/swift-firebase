@@ -50,7 +50,7 @@ internal struct FirestoreDataConverter {
   ///
   /// - Parameter document: The dictionary that describes the document of data you'd like to create.
   /// - Returns: a `MapFieldValue` with converted types that Firestore will understand.
-  static func firestoreValue(document: [String: Any]) -> firebase.firestore.MapFieldValue {
+  internal static func firestoreValue(document: [String: Any]) -> firebase.firestore.MapFieldValue {
     var map = firebase.firestore.MapFieldValue()
     for item in document {
       guard let value = firestoreValue(field: item.value) else { continue }
@@ -63,7 +63,7 @@ internal struct FirestoreDataConverter {
   /// Converts Swift values to their corresponding Firestore `FieldValue`s.
   /// - Parameter field: A Swift value you'd like to convert into a `FieldValue`
   /// - Returns: The `FieldValue` or `nil` that is the Firestore analog of the passed in value.
-  static func firestoreValue(field: Any) -> firebase.firestore.FieldValue? {
+  internal static func firestoreValue(field: Any) -> firebase.firestore.FieldValue? {
     switch field.self {
     case is NSNull:
       return firebase.firestore.FieldValue.Null()
