@@ -79,8 +79,9 @@ extension DocumentReference {
       withUnsafePointer(to: continuation) { continuation in
         future.OnCompletion_SwiftWorkaround({ future, pvContinuation in
           let pContinuation = pvContinuation?.assumingMemoryBound(to: Promise.self)
-          // Since this returns void, we only need to care about the error state
-          if future.pointee.error() != 0 {
+          if future.pointee.error() == 0 {
+            pContinuation.pointee.resume()
+          } else {
             let code = future.pointee.error()
             let message = String(cString: future.pointee.__error_messageUnsafe()!)
             pContinuation.pointee.resume(throwing: FirebaseError(code: code, message: message))
