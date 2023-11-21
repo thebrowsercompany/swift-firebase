@@ -11,8 +11,12 @@ import Foundation
 public typealias DocumentReference = firebase.firestore.DocumentReference
 public typealias SnapshotListenerCallback = (DocumentSnapshot?, NSError?) -> Void
 
-
 extension DocumentReference {
+  // Use a serial dispatch queue to write mutations from the block-based API.
+  // Passing these futures into the queue as an item should retain them long enough
+  // to do their job, but not block.
+  private static let mutationQueue = DispatchQueue(label: "firebase.firestore.document.mutations")
+
   public var documentID: String {
     String(swift_firebase.swift_cxx_shims.firebase.firestore.document_id(self))
   }
@@ -65,11 +69,32 @@ extension DocumentReference {
     return ListenerRegistration(boxed, instance)
   }
 
-  public func setData(_ data: [String: Any]) async throws -> Void {
-    try await setData(data, merge: false)
-  }
+  public func setData(_ data: [String: Any], merge: Bool = false, completion: ((NSError?) -> Void)?) {
+    let boxed = Unmanaged.passRetained(completion as AnyObject)
+    let converted = FirestoreDataConverter.firestoreValue(document: data)
+    let options = merge ? firebase.firestore.SetOptions.Merge() : firebase.firestore.SetOptions()
 
-  public func setData(_ data: [String: Any], merge: Bool) async throws -> Void {
+    Self.mutationQueue.async {
+      let future = swift_firebase.swift_cxx_shims.firebase.firestore.document_set_data(self, converted, options)
+
+      future.OnCompletion_SwiftWorkaround({ future, pvCallback in
+        guard let pCallback = pvCallback, let callback = Unmanaged<AnyObject>.fromOpaque(pCallback).takeUnretainedValue() as? ((NSError?) -> Void)? else {
+          return
+        }
+        if let code = future?.pointee.error(), code != 0 {
+          callback?(NSError(domain: "firebase.firestore.document", code: Int(code)))
+        } else {
+          callback?(nil)
+        }
+      }, UnsafeMutableRawPointer(boxed.toOpaque()))
+
+      future.Wait(firebase.FutureBase.kWaitTimeoutInfinite)
+    }
+  }
+}
+
+extension DocumentReference {
+  public func setData(_ data: [String: Any], merge: Bool = false) async throws -> Void {
     let converted = FirestoreDataConverter.firestoreValue(document: data)
     let options = merge ? firebase.firestore.SetOptions.Merge() : firebase.firestore.SetOptions()
 
