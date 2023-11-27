@@ -48,7 +48,8 @@ extension DocumentReference {
       future.Wait(firebase.FutureBase.kWaitTimeoutInfinite)
     }
 
-    return snapshot.pointee.exists && snapshot.pointee.is_valid() ? snapshot.pointee : nil
+    guard snapshot.pointee.exists else { return nil }
+    return snapshot.pointee.is_valid() ? snapshot.pointee : nil
   }
 
   public func addSnapshotListener(_ listener: @escaping SnapshotListenerCallback) -> ListenerRegistration {

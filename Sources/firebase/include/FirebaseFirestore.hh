@@ -65,7 +65,7 @@ snapshot_reference(const ::firebase::firestore::DocumentSnapshot snapshot) {
 }
 
 inline bool
-snapshot_exists(const ::firebase::firestore::DocumentSnapshot snapshot) {
+snapshot_exists(const ::firebase::firestore::DocumentSnapshot &snapshot) {
   return snapshot.exists();
 }
 
