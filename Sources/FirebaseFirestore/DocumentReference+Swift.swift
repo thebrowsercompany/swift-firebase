@@ -63,7 +63,10 @@ extension DocumentReference {
           let error = NSError.firestore(errorCode)
           // We only return a snapshot if the error code isn't 0 (aka the 'ok' error code)
           let returned = error == nil ? snapshot?.pointee : nil
-          callback(returned, error)
+
+          DispatchQueue.main.async {
+            callback(returned, error)
+          }
         }
       }, UnsafeMutableRawPointer(boxed.toOpaque()))
 
