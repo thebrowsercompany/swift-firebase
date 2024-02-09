@@ -2,11 +2,8 @@
 
 @_exported
 import firebase
-@_spi(Error)
-import FirebaseCore
 
 import CxxShim
-import Foundation
 
 public typealias DocumentChange = firebase.firestore.DocumentChange
 public typealias DocumentChangeType = firebase.firestore.DocumentChange.`Type`
