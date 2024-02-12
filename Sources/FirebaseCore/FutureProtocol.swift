@@ -2,15 +2,12 @@
 import firebase
 
 @_spi(Internal)
+public typealias FutureCompletionType = swift_firebase.swift_cxx_shims.firebase.FutureCompletionType
+
+@_spi(Internal)
 public protocol FutureProtocol {
   //associatedtype ResultType
-  //associatedtype CompletionType
-  //func CallOnCompletion(_ c: CompletionType)
-
-  func Foo()
-
-  //func CallOnCompletion(_ completion: @escaping (UnsafeMutableRawPointer) -> Void, _ userData: UnsafeMutableRawPointer)
-  func CallOnCompletion(_ c: swift_firebase.swift_cxx_shims.firebase.CompletionType, _ userData: UnsafeMutableRawPointer?)
+  func CallOnCompletion(_ completion: FutureCompletionType, _ user_data: UnsafeMutableRawPointer?)
 }
 
 @_spi(Internal)
@@ -26,14 +23,10 @@ public extension FutureProtocol {
   */
 
   func setCompletion(_ completion: @escaping () -> Void) {
-    Foo()
-
-    
     withUnsafePointer(to: completion) { completion in
       CallOnCompletion({ pvCompletion in
         // XXX
       }, UnsafeMutableRawPointer(mutating: completion))
     }
-    
   }
 }

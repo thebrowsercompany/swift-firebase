@@ -29,7 +29,7 @@ future_wait(const ::firebase::Future<ResultType>& future, int timeout_millisecon
 }
 */
 
-typedef void (*CompletionType)(void*);
+typedef void (*FutureCompletionType)(void*);
 
 // This class exists to provide protocol conformance to FutureProtocol.
 template <class R> class ConformingFuture: public ::firebase::Future<R> {
@@ -41,19 +41,7 @@ template <class R> class ConformingFuture: public ::firebase::Future<R> {
   ConformingFuture(const ::firebase::Future<R>& rhs)
       : ::firebase::Future<R>(rhs) {}
 
-  //FutureType AsFuture() {
-  //  return *this;
-  //}
-  //
-  
-  //typedef int CompletionType;
-  //void CallOnCompletion(CompletionType c) {}
-
-  void Foo() const {}
-
-  void CallOnCompletion(_Nonnull CompletionType, _Nullable void *userData) const {
-    // 
-  }
+  void CallOnCompletion(_Nonnull FutureCompletionType, _Nullable void* user_data) const {}
 } __attribute__((swift_attr("conforms_to:FirebaseCore.FutureProtocol")));
 
 
