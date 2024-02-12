@@ -12,16 +12,6 @@ public protocol FutureProtocol {
 
 @_spi(Internal)
 public extension FutureProtocol {
-  /*
-  func setCompletion(_ completion: @escaping (ResultType?, Error?) -> Void) {
-    withUnsafePointer(to: completion) { completion in
-      setOnCompletion({ future, pvCompletion in
-        // XXX
-      }, UnsafeMutableRawPointer(mutating: completion))
-    }
-  }
-  */
-
   func setCompletion(_ completion: @escaping () -> Void) {
     withUnsafePointer(to: completion) { completion in
       CallOnCompletion({ pvCompletion in
