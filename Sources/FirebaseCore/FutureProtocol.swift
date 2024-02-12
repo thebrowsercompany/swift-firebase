@@ -10,7 +10,7 @@ public protocol FutureProtocol {
   func Foo()
 
   //func CallOnCompletion(_ completion: @escaping (UnsafeMutableRawPointer) -> Void, _ userData: UnsafeMutableRawPointer)
-  func CallOnCompletion(_ c: UnsafeMutableRawPointer)
+  func CallOnCompletion(_ c: swift_firebase.swift_cxx_shims.firebase.CompletionType, _ userData: UnsafeMutableRawPointer?)
 }
 
 @_spi(Internal)
@@ -28,12 +28,12 @@ public extension FutureProtocol {
   func setCompletion(_ completion: @escaping () -> Void) {
     Foo()
 
-    /*
+    
     withUnsafePointer(to: completion) { completion in
       CallOnCompletion({ pvCompletion in
         // XXX
       }, UnsafeMutableRawPointer(mutating: completion))
     }
-    */
+    
   }
 }

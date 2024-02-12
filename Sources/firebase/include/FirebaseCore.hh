@@ -51,7 +51,7 @@ template <class R> class ConformingFuture: public ::firebase::Future<R> {
 
   void Foo() const {}
 
-  void CallOnCompletion(void* completion) const {
+  void CallOnCompletion(_Nonnull CompletionType, _Nullable void *userData) const {
     // 
   }
 } __attribute__((swift_attr("conforms_to:FirebaseCore.FutureProtocol")));
