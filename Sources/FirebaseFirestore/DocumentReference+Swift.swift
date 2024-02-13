@@ -33,17 +33,22 @@ extension DocumentReference {
     String(swift_firebase.swift_cxx_shims.firebase.firestore.document_path(self))
   }
 
+  // This variant is provided for compatibility with the ObjC API.
   public func getDocument(completion: @escaping (DocumentSnapshot?, Error?) -> Void) {
     let future = swift_firebase.swift_cxx_shims.firebase.firestore.document_get(self, .default)
     future.setCompletion({
       let (snapshot, error) = future.resultAndError
-      completion(snapshot, error)
+      DispatchQueue.main.async {
+        completion(snapshot, error)
+      }
     })
   }
 
   public func getDocument() async throws -> DocumentSnapshot {
     try await withCheckedThrowingContinuation { continuation in
-      getDocument(completion: { snapshot, error in
+      let future = swift_firebase.swift_cxx_shims.firebase.firestore.document_get(self, .default)
+      future.setCompletion({
+        let (snapshot, error) = future.resultAndError
         if let error {
           continuation.resume(throwing: error)
         } else {

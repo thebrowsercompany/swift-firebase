@@ -6,6 +6,7 @@ import firebase
 import FirebaseCore
 
 import CxxShim
+import Foundation
 
 public typealias Query = firebase.firestore.Query
 
@@ -14,23 +15,28 @@ extension Query {
     swift_firebase.swift_cxx_shims.firebase.firestore.query_firestore(self)
   }
 
+  // This variant is provided for compatibility with the ObjC API.
   public func getDocuments(completion: @escaping (QuerySnapshot?, Error?) -> Void) {
     let future = swift_firebase.swift_cxx_shims.firebase.firestore.query_get(self, .default)
     future.setCompletion({
       let (snapshot, error) = future.resultAndError
-      completion(snapshot, error)
+      DispatchQueue.main.async {
+        completion(snapshot, error)
+      }
     })
   }
 
   public func getDocuments() async throws -> QuerySnapshot {
     try await withCheckedThrowingContinuation { continuation in
-      getDocuments() { snapshot, error in
+      let future = swift_firebase.swift_cxx_shims.firebase.firestore.query_get(self, .default)
+      future.setCompletion({
+        let (snapshot, error) = future.resultAndError
         if let error {
           continuation.resume(throwing: error)
         } else {
           continuation.resume(returning: snapshot ?? .init())
         }
-      }
+      })
     }
   }
 }
