@@ -3,6 +3,8 @@
 @_exported
 import firebase
 
+import Foundation
+
 @_spi(Internal)
 public typealias FutureCompletionType = swift_firebase.swift_cxx_shims.firebase.FutureCompletionType
 
@@ -15,15 +17,19 @@ public protocol FutureProtocol {
   func CallOnCompletion(_ completion: FutureCompletionType, _ user_data: UnsafeMutableRawPointer?)
 }
 
+private class CompletionWrapper {
+  let completion: () -> Void
+  init(_ completion: @escaping () -> Void) {
+    self.completion = completion
+  }
+}
+
 @_spi(Internal)
 public extension FutureProtocol {
   func setCompletion(_ completion: @escaping () -> Void) {
-    withUnsafePointer(to: completion) { completion in
-      CallOnCompletion({ pvCompletion in
-        let pCompletion = pvCompletion?.assumingMemoryBound(to: (() -> Void).self)
-        pCompletion.pointee()
-      }, UnsafeMutableRawPointer(mutating: completion))
-    }
+    CallOnCompletion({ ptr in
+      Unmanaged<CompletionWrapper>.fromOpaque(ptr!).takeRetainedValue().completion()
+    }, Unmanaged.passRetained(CompletionWrapper(completion)).toOpaque())
   }
 
   var resultAndError: (ResultType?, Error?) {

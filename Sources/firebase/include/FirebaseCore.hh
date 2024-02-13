@@ -3,31 +3,9 @@
 
 #include <firebase/util.h>
 
+#include <stdio.h>
+
 namespace swift_firebase::swift_cxx_shims::firebase {
-
-/*
-template <class ResultType>
-class FutureWithResultOrError {
- public:
-  typedef void (*Callback)(
-      const ResultType* result, int error, void* user_data);
-};
-
-template <class ResultType> inline void
-future_with_result_or_error(
-    const ::firebase::Future<ResultType>& future,
-    FutureWithResultOrError<ResultType>::Callback callback,
-    void* user_data) {
-  // XXX
-}
-*/
-
-/*
-template <class ResultType> inline bool
-future_wait(const ::firebase::Future<ResultType>& future, int timeout_milliseconds) {
-  return future.Wait(timeout_milliseconds);
-}
-*/
 
 typedef void (*FutureCompletionType)(void*);
 
@@ -35,15 +13,18 @@ typedef void (*FutureCompletionType)(void*);
 template <class R> class ConformingFuture: public ::firebase::Future<R> {
  public:
   typedef R ResultType;
-  //typedef ::firebase::Future<R> FutureType;
-  //typedef ::firebase::Future<R>::TypedCompletionCallback TypedCompletionCallback;
+  typedef ::firebase::Future<R> FutureType;
 
-  ConformingFuture(const ::firebase::Future<R>& rhs)
-      : ::firebase::Future<R>(rhs) {}
+  ConformingFuture(const FutureType& rhs) : FutureType(rhs) {}
 
-  void CallOnCompletion(_Nonnull FutureCompletionType, _Nullable void* user_data) const {}
+  void CallOnCompletion(
+      _Nonnull FutureCompletionType completion,
+      _Nullable void* user_data) const {
+    OnCompletion([completion, user_data](const FutureBase&) {
+      completion(user_data);
+    });
+  }
 } __attribute__((swift_attr("conforms_to:FirebaseCore.FutureProtocol")));
-
 
 } // namespace swift_firebase::swift_cxx_shims::firebase
 

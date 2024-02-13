@@ -45,14 +45,15 @@ document_path(const ::firebase::firestore::DocumentReference document) {
   return document.path();
 }
 
-inline ::firebase::Future<::firebase::firestore::DocumentSnapshot>
+inline ::swift_firebase::swift_cxx_shims::firebase::ConformingFuture<
+    ::firebase::firestore::DocumentSnapshot>
 document_get(const ::firebase::firestore::DocumentReference document,
              ::firebase::firestore::Source source =
                  ::firebase::firestore::Source::kDefault) {
   return document.Get(source);
 }
 
-inline ::firebase::Future<void>
+inline ::swift_firebase::swift_cxx_shims::firebase::ConformingFuture<void>
 document_set_data(::firebase::firestore::DocumentReference document,
                   const ::firebase::firestore::MapFieldValue data,
                   const ::firebase::firestore::SetOptions options) {
@@ -175,7 +176,8 @@ query_firestore(::firebase::firestore::Query query) {
   return query.firestore();
 }
 
-inline ::swift_firebase::swift_cxx_shims::firebase::ConformingFuture<::firebase::firestore::QuerySnapshot>
+inline ::swift_firebase::swift_cxx_shims::firebase::ConformingFuture<
+    ::firebase::firestore::QuerySnapshot>
 query_get(const ::firebase::firestore::Query query,
              ::firebase::firestore::Source source =
                  ::firebase::firestore::Source::kDefault) {
