@@ -20,12 +20,13 @@ template <class R> class ConformingFuture: public ::firebase::Future<R> {
 
   ConformingFuture(const FutureType& rhs) : FutureType(rhs) {}
 
-  void CallOnCompletion(
+  void OnCompletion(
       _Nonnull FutureCompletionType completion,
       _Nullable void* user_data) const {
-    OnCompletion([completion, user_data](const FutureBase&) {
-      completion(user_data);
-    });
+    ::firebase::FutureBase::OnCompletion(
+        [completion, user_data](const FutureBase&) {
+          completion(user_data);
+        });
   }
 } __attribute__((swift_attr("conforms_to:FirebaseCore.FutureProtocol")));
 

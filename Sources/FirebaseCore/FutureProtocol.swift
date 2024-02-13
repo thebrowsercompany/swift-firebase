@@ -20,7 +20,7 @@ public protocol FutureProtocol {
   func error() -> Int32
   func __error_messageUnsafe() -> UnsafePointer<CChar>?
   func __resultUnsafe() -> UnsafePointer<ResultType>?
-  func CallOnCompletion(
+  func OnCompletion(
     _ completion: FutureCompletionType,
     _ user_data: UnsafeMutableRawPointer?
   )
@@ -35,7 +35,7 @@ public extension FutureProtocol {
   // While the underlying Firebase `OnCompletion` method can provide a reference
   // back to the Future, we don't need to expose that here.
   func setCompletion(_ completion: @escaping () -> Void) {
-    CallOnCompletion({ ptr in
+    OnCompletion({ ptr in
       Unmanaged<CompletionReference>.fromOpaque(ptr!).takeRetainedValue().completion()
     }, Unmanaged.passRetained(CompletionReference(completion)).toOpaque())
   }
