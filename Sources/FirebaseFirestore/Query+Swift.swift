@@ -33,16 +33,18 @@ extension Query {
 
   func getDocuments(completion: @escaping (QuerySnapshot?, Error?) -> Void) {
     let future = swift_firebase.swift_cxx_shims.firebase.firestore.query_get(self, .default)
-    /*
-    withUnsafePointer(to: completion) { completion in
-      future.CallOnCompletion({ _ in
-        // XXX
-      }, UnsafeMutableRawPointer(mutating: completion))
-    }
-    */
-
     future.setCompletion({
-      // XXX
+      let (result, error) = future.resultAndError
+      completion(result, error)
+
+      /*
+      if future.error() == 0 {
+        completion(future.__resultUnsafe().pointee, nil)
+      } else {
+        let message = String(cString: future.__error_messageUnsafe()!)
+        completion(nil, FirebaseError(code: future.error(), message: message))
+      }
+      */
     })
 
     /*
