@@ -10,11 +10,11 @@ import CxxShim
 public typealias Query = firebase.firestore.Query
 
 extension Query {
-  var firestore: Firestore {
+  public var firestore: Firestore {
     swift_firebase.swift_cxx_shims.firebase.firestore.query_firestore(self)
   }
 
-  func getDocuments(completion: @escaping (QuerySnapshot?, Error?) -> Void) {
+  public func getDocuments(completion: @escaping (QuerySnapshot?, Error?) -> Void) {
     let future = swift_firebase.swift_cxx_shims.firebase.firestore.query_get(self, .default)
     future.setCompletion({
       let (snapshot, error) = future.resultAndError
@@ -22,7 +22,7 @@ extension Query {
     })
   }
 
-  func getDocuments() async throws -> QuerySnapshot {
+  public func getDocuments() async throws -> QuerySnapshot {
     try await withCheckedThrowingContinuation { continuation in
       getDocuments() { snapshot, error in
         if let error {

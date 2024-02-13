@@ -6,7 +6,8 @@ import firebase
 import Foundation
 
 @_spi(Internal)
-public typealias FutureCompletionType = swift_firebase.swift_cxx_shims.firebase.FutureCompletionType
+public typealias FutureCompletionType =
+  swift_firebase.swift_cxx_shims.firebase.FutureCompletionType
 
 // This protocol enables extracting common code for Future handling. Because
 // C++ interop is limited for templated class types, we need to invent a
@@ -19,7 +20,10 @@ public protocol FutureProtocol {
   func error() -> Int32
   func __error_messageUnsafe() -> UnsafePointer<CChar>?
   func __resultUnsafe() -> UnsafePointer<ResultType>?
-  func CallOnCompletion(_ completion: FutureCompletionType, _ user_data: UnsafeMutableRawPointer?)
+  func CallOnCompletion(
+    _ completion: FutureCompletionType,
+    _ user_data: UnsafeMutableRawPointer?
+  )
 }
 
 // A home for various helper functions that make it easier to work with
@@ -32,8 +36,8 @@ public extension FutureProtocol {
   // back to the Future, we don't need to expose that here.
   func setCompletion(_ completion: @escaping () -> Void) {
     CallOnCompletion({ ptr in
-      Unmanaged<CompletionWrapper>.fromOpaque(ptr!).takeRetainedValue().completion()
-    }, Unmanaged.passRetained(CompletionWrapper(completion)).toOpaque())
+      Unmanaged<CompletionReference>.fromOpaque(ptr!).takeRetainedValue().completion()
+    }, Unmanaged.passRetained(CompletionReference(completion)).toOpaque())
   }
 
   // A convenient way to access the result or error of a Future. Handles the
@@ -50,7 +54,7 @@ public extension FutureProtocol {
 
 // The Unmanaged type only works with classes, so we need a wrapper for the
 // completion callback.
-private class CompletionWrapper {
+private class CompletionReference {
   let completion: () -> Void
   init(_ completion: @escaping () -> Void) {
     self.completion = completion
