@@ -184,9 +184,6 @@ query_get(const ::firebase::firestore::Query query,
   return query.Get(source);
 }
 
-// MARK: QuerySnapshot
-
-
 } // namespace swift_firebase::swift_cxx_shims::firebase::firestore
 
 #endif
