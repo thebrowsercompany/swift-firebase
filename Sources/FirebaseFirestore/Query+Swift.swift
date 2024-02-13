@@ -67,4 +67,119 @@ extension Query {
 
     return ListenerRegistration(boxed, instance)
   }
+
+  /* TODO: Implement these remaining methods:
+
+  public func whereFilter(_ filter: Filter) -> Query {
+  }
+
+  public func whereField(_ field: String, isEqualTo value: Any) -> Query {
+  }
+
+  public func whereField(_ path: FieldPath, isNotEqualTo value: Any) -> Query {
+  }
+
+  public func whereField(_ field: String, isNotEqualTo value: Any) -> Query {
+  }
+
+  public func whereField(_ path: FieldPath, isEqualTo value: Any) -> Query {
+  }
+
+  public func whereField(_ field: String, isLessThan value: Any) -> Query {
+  }
+
+  public func whereField(_ path: FieldPath, isLessThan value: Any) -> Query {
+  }
+
+  public func whereField(_ field: String, isLessThanOrEqualTo value: Any) -> Query {
+  }
+
+  public func whereField(_ path: FieldPath, isLessThanOrEqualTo value: Any) -> Query {
+  }
+
+  public func whereField(_ field: String, isGreaterThan value: Any) -> Query {
+  }
+
+  public func whereField(_ path: FieldPath, isGreaterThan value: Any) -> Query {
+  }
+
+  public func whereField(_ field: String, isGreaterThanOrEqualTo value: Any) -> Query {
+  }
+
+  public func whereField(_ path: FieldPath, isGreaterThanOrEqualTo value: Any) -> Query {
+  }
+
+  public func whereField(_ field: String, arrayContains value: Any) -> Query {
+  }
+
+  public func whereField(_ path: FieldPath, arrayContains value: Any) -> Query {
+  }
+
+  public func whereField(_ field: String, arrayContainsAny values: [Any]) -> Query {
+  }
+
+  public func whereField(_ path: FieldPath, arrayContainsAny values: [Any]) -> Query {
+  }
+
+  public func whereField(_ field: String, in values: [Any]) -> Query {
+  }
+
+  public func whereField(_ path: FieldPath, in values: [Any]) -> Query {
+  }
+
+  public func whereField(_ field: String, notIn values: [Any]) -> Query {
+  }
+
+  public func whereField(_ path: FIRFieldPath, notIn values: [Any]) -> Query {
+  }
+
+  public func filter(using predicate: NSPredicate) -> Query {
+  }
+
+  public func order(by field: String) -> Query {
+  }
+
+  public func order(by path: FieldPath) -> Query {
+  }
+
+  public func order(by field: String, descending: Bool) -> Query {
+  }
+
+  public func order(by path: FieldPath, descending: Bool) -> Query {
+  }
+
+  public func limit(to limit: Int) -> Query {
+  }
+
+  public func limit(toLast limit: Int) -> Query {
+  }
+
+  public func start(atDocument document: DocumentSnapshot) -> Query {
+  }
+
+  public func start(at fieldValues: [Any]) -> Query {
+  }
+
+  public func start(afterDocument document: DocumentSnapshot) -> Query {
+  }
+
+  public func start(after fieldValues: [Any]) -> Query {
+  }
+
+  public func end(beforeDocument document: DocumentSnapshot) -> Query {
+  }
+
+  public func end(before fieldValues: [Any]) -> Query {
+  }
+
+  public func end(atDocument document: DocumentSnapshot) -> Query {
+  }
+
+  public func end(at fieldValues: [Any]) -> Query {
+  }
+
+  public var count: AggregateQuery {
+  }
+
+  */
 }

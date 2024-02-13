@@ -171,7 +171,7 @@ document_change_new_index(const ::firebase::firestore::DocumentChange change) {
 
 // MARK: Query
 
-inline ::firebase::firestore::Firestore *
+inline ::firebase::firestore::Firestore*
 query_firestore(::firebase::firestore::Query query) {
   return query.firestore();
 }
@@ -199,6 +199,36 @@ query_add_snapshot_listener(
           const std::string &error_message) {
         callback(&snapshot, error_code, error_message.c_str(), user_data);
       });
+}
+
+// MARK: QuerySnapshot
+
+inline ::firebase::firestore::Query
+query_snapshot_query(const ::firebase::firestore::QuerySnapshot& snapshot) {
+  return snapshot.query();
+}
+
+inline ::firebase::firestore::SnapshotMetadata
+query_snapshot_metadata(const ::firebase::firestore::QuerySnapshot& snapshot) {
+  return snapshot.metadata();
+}
+
+inline std::vector<::firebase::firestore::DocumentChange>
+query_snapshot_document_changes(
+    const ::firebase::firestore::QuerySnapshot& snapshot,
+    ::firebase::firestore::MetadataChanges metadata_changes =
+        ::firebase::firestore::MetadataChanges::kExclude) {
+  return snapshot.DocumentChanges(metadata_changes);
+}
+
+inline std::vector<::firebase::firestore::DocumentSnapshot>
+query_snapshot_documents(const ::firebase::firestore::QuerySnapshot& snapshot) {
+  return snapshot.documents();
+}
+
+inline std::size_t
+query_snapshot_size(const ::firebase::firestore::QuerySnapshot& snapshot) {
+  return snapshot.size();
 }
 
 } // namespace swift_firebase::swift_cxx_shims::firebase::firestore
