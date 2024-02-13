@@ -9,7 +9,10 @@ namespace swift_firebase::swift_cxx_shims::firebase {
 
 typedef void (*FutureCompletionType)(void*);
 
-// This class exists to provide protocol conformance to FutureProtocol.
+// This class exists to provide protocol conformance to FutureProtocol.  It
+// also provides a method to invoke `OnCompletion` in a way that works from
+// Swift. We can ignore the `FutureBase` param as the Swift caller can just
+// retain the Future as part of its closure.
 template <class R> class ConformingFuture: public ::firebase::Future<R> {
  public:
   typedef R ResultType;
