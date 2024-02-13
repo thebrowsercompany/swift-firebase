@@ -27,8 +27,9 @@ extension Query {
       getDocuments() { snapshot, error in
         if let error {
           continuation.resume(throwing: error)
+        } else {
+          continuation.resume(returning: snapshot ?? .init())
         }
-        continuation.resume(returning: snapshot ?? .init())
       }
     }
   }
