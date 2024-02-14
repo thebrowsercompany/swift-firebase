@@ -5,16 +5,16 @@ import firebase
 
 import Foundation
 
-@_spi(Internal)
+@_spi(FirebaseInternal)
 public typealias FutureCompletionType =
   swift_firebase.swift_cxx_shims.firebase.FutureCompletionType
 
 // This protocol enables extracting common code for Future handling. Because
 // C++ interop is limited for templated class types, we need to invent a
 // protocol to reflect the features of a Future<R> that should be generically
-// available. This works by having a C++ annotation (see ConformingFuture<R>)
-// that specifies this protocol conformance.
-@_spi(Internal)
+// available. This works by having a C++ annotation (see swift_cxx_shims'
+// Future<R>) that specifies this protocol conformance.
+@_spi(FirebaseInternal)
 public protocol FutureProtocol {
   associatedtype ResultType
   func error() -> Int32
@@ -26,9 +26,7 @@ public protocol FutureProtocol {
   )
 }
 
-// A home for various helper functions that make it easier to work with
-// Firebase Future objects from Swift.
-@_spi(Internal)
+@_spi(FirebaseInternal)
 public extension FutureProtocol {
   // Callsites retain their own reference to the Future<R>, but they still need
   // a way to know when the Future completes. This provides that mechanism.
@@ -40,15 +38,21 @@ public extension FutureProtocol {
     }, Unmanaged.passRetained(CompletionReference(completion)).toOpaque())
   }
 
-  // A convenient way to access the result or error of a Future. Handles the
-  // messy details.
+  var result: ResultType? {
+    __resultUnsafe().pointee
+  }
+
+  var errorMessage: String? {
+    guard let errorMessageUnsafe = __error_messageUnsafe() else { return nil }
+    return String(cString: errorMessageUnsafe)
+  }
+
   var resultAndError: (ResultType?, Error?) {
     let error = error()
     guard error == 0 else {
-      let message = String(cString: __error_messageUnsafe()!)
-      return (nil, FirebaseError(code: error, message: message))
+      return (nil, FirebaseError(code: error, message: errorMessage!))
     }
-    return (__resultUnsafe().pointee, nil)
+    return (result, nil)
   }
 }
 

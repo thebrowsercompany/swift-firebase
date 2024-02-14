@@ -13,12 +13,13 @@ typedef void (*FutureCompletionType)(void*);
 // also provides a method to invoke `OnCompletion` in a way that works from
 // Swift. We can ignore the `FutureBase` param as the Swift caller can just
 // retain the Future as part of its closure.
-template <class R> class ConformingFuture: public ::firebase::Future<R> {
+template <class R>
+class __attribute__((swift_attr("conforms_to:FirebaseCore.FutureProtocol")))
+  Future : public ::firebase::Future<R> {
  public:
   typedef R ResultType;
-  typedef ::firebase::Future<R> FutureType;
 
-  ConformingFuture(const FutureType& rhs) : FutureType(rhs) {}
+  Future(const ::firebase::Future<R>& rhs) : ::firebase::Future<R>(rhs) {}
 
   void OnCompletion(
       _Nonnull FutureCompletionType completion,
@@ -28,7 +29,7 @@ template <class R> class ConformingFuture: public ::firebase::Future<R> {
           completion(user_data);
         });
   }
-} __attribute__((swift_attr("conforms_to:FirebaseCore.FutureProtocol")));
+};
 
 } // namespace swift_firebase::swift_cxx_shims::firebase
 
