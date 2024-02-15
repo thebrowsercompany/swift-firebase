@@ -23,6 +23,7 @@ class __attribute__((swift_attr("conforms_to:FirebaseCore.FutureProtocol")))
 
   // Allow explicit conversion from `Future<void>` in support of `VoidFuture`.
   static Future From(const ::firebase::Future<void>& other) {
+    static_assert(sizeof(::firebase::Future<void>) == sizeof(::firebase::Future<R>));
     return Future(*reinterpret_cast<const ::firebase::Future<R>*>(&other));
   }
   
