@@ -14,7 +14,7 @@ extension DocumentChange {
   }
 
   public var document: QueryDocumentSnapshot {
-    swift_firebase.swift_cxx_shims.firebase.firestore.document_change_document(self)
+    .init(snapshot: swift_firebase.swift_cxx_shims.firebase.firestore.document_change_document(self))
   }
 
   public var oldIndex: UInt {
