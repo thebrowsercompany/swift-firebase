@@ -39,7 +39,7 @@ typedef ::firebase::firestore::Error (*FirebaseRunTransactionUpdateCallback)(
     void *user_data);
 inline VoidFuture
 firestore_run_transaction(
-    ::firebase::firestore::Firestore* firestore,
+    ::firebase::firestore::Firestore *firestore,
     ::firebase::firestore::TransactionOptions options,
     FirebaseRunTransactionUpdateCallback update_callback,
     void *user_data) {
@@ -57,7 +57,7 @@ firestore_run_transaction(
 }
 
 inline ::firebase::firestore::WriteBatch
-firestore_batch(::firebase::firestore::Firestore* firestore) {
+firestore_batch(::firebase::firestore::Firestore *firestore) {
   return firestore->batch();
 }
 
