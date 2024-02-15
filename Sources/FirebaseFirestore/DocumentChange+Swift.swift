@@ -13,7 +13,7 @@ extension DocumentChange {
     swift_firebase.swift_cxx_shims.firebase.firestore.document_change_type(self)
   }
 
-  public var document: DocumentSnapshot {
+  public var document: QueryDocumentSnapshot {
     swift_firebase.swift_cxx_shims.firebase.firestore.document_change_document(self)
   }
 
