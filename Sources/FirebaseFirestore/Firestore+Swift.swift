@@ -50,6 +50,14 @@ extension Firestore {
       self, options ?? .init(), { transaction, pErrorMessage, pvUpdateBlock in
         let context = Unmanaged<AnyObject>.fromOpaque(pvUpdateBlock!).takeUnretainedValue() as! TransactionContext
 
+        // Instead of trying to relay the generated `NSError` through firebase's `Error` type
+        // and error message string, just store the `NSError` on `context` and access it later.
+        // We then only need to tell firebase if the update block succeeded or failed and can
+        // just not bother setting `pErrorMessage`.
+
+        // It is expected to run `updateBlock` on whatever thread this happens to be. This is
+        // consistent with the behavior of the ObjC API as well.
+
         withUnsafePointer(to: context.error) { pError in
           context.result = context.updateBlock(transaction!.pointee, pError)
         }
@@ -76,7 +84,7 @@ extension Firestore {
     }
   }
 
-  /*
+  /* TODO: Implement this.
   public func batch() -> WriteBatch {
   }
   */
