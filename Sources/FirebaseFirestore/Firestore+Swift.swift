@@ -80,14 +80,14 @@ extension Firestore {
     swift_firebase.swift_cxx_shims.firebase.firestore.firestore_batch(self)
   }
 
-  private typealias TransactionUpdateBlock = (Transaction, UnsafePointer<NSError?>?) -> Any?
-
   private class TransactionContext {
-    let updateBlock: TransactionUpdateBlock
+    typealias UpdateBlock = (Transaction, UnsafePointer<NSError?>?) -> Any?
+
+    let updateBlock: UpdateBlock
     var result: Any?
     var error: NSError?
 
-    init(updateBlock: @escaping TransactionUpdateBlock) {
+    init(updateBlock: @escaping UpdateBlock) {
       self.updateBlock = updateBlock
     }
   }
