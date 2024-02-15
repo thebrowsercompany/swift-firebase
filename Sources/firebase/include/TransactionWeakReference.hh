@@ -21,8 +21,8 @@ class TransactionWeakReference {
 
   TransactionWeakReference(::firebase::firestore::Transaction* transaction = nullptr)
       : container_(std::make_shared<Container>(transaction)) {}
-  void reset() {
-    container_->transaction = nullptr;
+  void reset(::firebase::firestore::Transaction* transaction = nullptr) {
+    container_->transaction = transaction;
   }
 
  private:
