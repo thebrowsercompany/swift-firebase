@@ -63,7 +63,7 @@ firestore_batch(::firebase::firestore::Firestore *firestore) {
 
 // MARK: - DocumentReference
 
-inline ::firebase::firestore::Firestore*
+inline ::firebase::firestore::Firestore *
 document_firestore(::firebase::firestore::DocumentReference document) {
   return document.firestore();
 }
