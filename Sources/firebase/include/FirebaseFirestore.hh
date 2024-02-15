@@ -3,6 +3,8 @@
 #ifndef firebase_include_FirebaseFirestore_hh
 #define firebase_include_FirebaseFirestore_hh
 
+#include <memory>
+
 #include <firebase/firestore.h>
 
 #include "FirebaseCore.hh"
@@ -11,6 +13,7 @@
 // virtual function support currently in Swift. As that support changes
 // these functions will go away whenever possible.
 namespace swift_firebase::swift_cxx_shims::firebase::firestore {
+
 inline ::firebase::firestore::Settings
 firestore_settings(::firebase::firestore::Firestore *firestore) {
   return firestore->settings();
@@ -27,6 +30,11 @@ firestore_collection(::firebase::firestore::Firestore *firestore,
                      const ::std::string &collection_path) {
   return firestore->Collection(collection_path);
 }
+
+/*
+inline ::swift_firebase::swift_cxx_shims::firebase::Future<void>
+firestore_run_transaction(
+*/
 
 // MARK: - DocumentReference
 
@@ -278,6 +286,37 @@ inline std::size_t
 query_snapshot_size(const ::firebase::firestore::QuerySnapshot& snapshot) {
   return snapshot.size();
 }
+
+// MARK: Transaction
+
+// Transaction is non-copyable so we need a wrapper type that is copyable.
+// This type will hold a valid Transaction during the scope of a RunTransaction
+// callback (see Firestore+Swift.swift for details).
+class TransactionWeakReference {
+ public:
+  ~TransactionWeakReference() = default;
+
+  TransactionWeakReference(const TransactionWeakReference& other)
+      : container_(other.container_) {}
+  TransactionWeakReference& operator=(const TransactionWeakReference& other) {
+    container_ = other.container_;
+    return *this;
+  }
+
+  TransactionWeakReference(::firebase::firestore::Transaction* transaction = nullptr)
+      : container_(std::make_shared<Container>(transaction)) {}
+  void reset() {
+    container_->transaction = nullptr;
+  }
+
+ private:
+  struct Container {
+    Container(::firebase::firestore::Transaction* transaction)
+        : transaction(transaction) {}
+    ::firebase::firestore::Transaction* transaction;
+  };
+  std::shared_ptr<Container> container_;
+};
 
 } // namespace swift_firebase::swift_cxx_shims::firebase::firestore
 

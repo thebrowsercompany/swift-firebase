@@ -34,6 +34,50 @@ extension Firestore {
   public func collection(_ collectionPath: String) -> CollectionReference {
     swift_firebase.swift_cxx_shims.firebase.firestore.firestore_collection(self, std.string(collectionPath))
   }
+
+  public func runTransaction(_ updateBlock: @escaping (Transaction, UnsafePointer<NSError?>?) -> Any?, completion: @escaping (Any?, Error?) -> Void) {
+    runTransaction(with: nil, block: updateBlock, completion: completion)
+  }
+
+  public func runTransaction(
+    with options: TransactionOptions?,
+    block updateBlock: @escaping (Transaction, UnsafePointer<NSError?>?) -> Any?,
+    completion: @escaping (Any?, Error?) -> Void
+  ) {
+    let context = TransactionContext(updateBlock: updateBlock)
+    let boxed = Unmanaged.passRetained(context as AnyObject)
+    let future = swift_firebase.swift_cxx_shims.firebase.firestore.firestore_run_transaction(
+      self, options, { transaction, pvUpdateBlock in
+        let context = Unmanaged<AnyObject>.fromOpaque(pvUpdateBlock!).takeUnretainedValue() as! TransactionContext
+
+        context.result = context.updateBlock(transaction, nil)
+
+        return 0 // XXX
+      },
+      UnsafeMutableRawPointer(boxed.toOpaque())
+    )
+    future.setCompletion({
+      completion(context.result, context.error)
+      boxed.release()
+    })
+  }
+
+  private typealias TransactionUpdateBlock = (Transaction, UnsafePointer<NSError?>?) -> Any?
+
+  private class TransactionContext {
+    let updateBlock: TransactionUpdateBlock
+    var result: Any?
+    var error: NSError?
+
+    init(updateBlock: @escaping TransactionUpdateBlock) {
+      self.updateBlock = updateBlock
+    }
+  }
+
+  /*
+  public func batch() -> WriteBatch {
+  }
+  */
 }
 
 // An extension that adds the encoder and decoder functions required
