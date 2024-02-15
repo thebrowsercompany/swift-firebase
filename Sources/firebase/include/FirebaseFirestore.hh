@@ -33,7 +33,7 @@ firestore_collection(::firebase::firestore::Firestore* firestore,
   return firestore->Collection(collection_path);
 }
 
-typedef int (*FirebaseRunTransactionUpdateCallback)(
+typedef ::firebase::firestore::Error (*FirebaseRunTransactionUpdateCallback)(
     TransactionWeakReference* transaction,
     std::string& error_message,
     void *user_data);
@@ -42,7 +42,19 @@ firestore_run_transaction(
     ::firebase::firestore::Firestore* firestore,
     ::firebase::firestore::TransactionOptions options,
     FirebaseRunTransactionUpdateCallback update_callback,
-    void* user_data);
+    void* user_data) {
+  return ::swift_firebase::swift_cxx_shims::firebase::VoidFuture::From(
+      firestore->RunTransaction(options, [update_callback, user_data](
+          ::firebase::firestore::Transaction& transaction,
+          std::string& error_message
+      ) -> ::firebase::firestore::Error {
+        TransactionWeakReference transaction_ref(&transaction);
+        ::firebase::firestore::Error error =
+            update_callback(&transaction_ref, error_message, user_data);
+        transaction_ref.reset();
+        return error;
+      }));
+}
 
 // MARK: - DocumentReference
 

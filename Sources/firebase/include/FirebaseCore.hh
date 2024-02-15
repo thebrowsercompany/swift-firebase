@@ -21,6 +21,11 @@ class __attribute__((swift_attr("conforms_to:FirebaseCore.FutureProtocol")))
 
   Future(const ::firebase::Future<R>& rhs) : ::firebase::Future<R>(rhs) {}
 
+  // Allow explicit conversion from `Future<void>` in support of `VoidFuture`.
+  static Future From(const ::firebase::Future<void>& other) {
+    return Future(*reinterpret_cast<const ::firebase::Future<R>*>(&other));
+  }
+  
   void OnCompletion(
       _Nonnull FutureCompletionType completion,
       _Nullable void* user_data) const {
