@@ -17,24 +17,24 @@
 namespace swift_firebase::swift_cxx_shims::firebase::firestore {
 
 inline ::firebase::firestore::Settings
-firestore_settings(::firebase::firestore::Firestore* firestore) {
+firestore_settings(::firebase::firestore::Firestore *firestore) {
   return firestore->settings();
 }
 
 inline ::firebase::firestore::DocumentReference
-firestore_document(::firebase::firestore::Firestore* firestore,
+firestore_document(::firebase::firestore::Firestore *firestore,
                    const ::std::string &document_path) {
   return firestore->Document(document_path);
 }
 
 inline ::firebase::firestore::CollectionReference
-firestore_collection(::firebase::firestore::Firestore* firestore,
+firestore_collection(::firebase::firestore::Firestore *firestore,
                      const ::std::string &collection_path) {
   return firestore->Collection(collection_path);
 }
 
 typedef ::firebase::firestore::Error (*FirebaseRunTransactionUpdateCallback)(
-    TransactionWeakReference* transaction,
+    TransactionWeakReference *transaction,
     std::string& error_message,
     void *user_data);
 inline VoidFuture
@@ -42,7 +42,7 @@ firestore_run_transaction(
     ::firebase::firestore::Firestore* firestore,
     ::firebase::firestore::TransactionOptions options,
     FirebaseRunTransactionUpdateCallback update_callback,
-    void* user_data) {
+    void *user_data) {
   return VoidFuture::From(
       firestore->RunTransaction(options, [update_callback, user_data](
           ::firebase::firestore::Transaction& transaction,
