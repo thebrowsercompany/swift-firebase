@@ -72,7 +72,7 @@ extension Query {
 
   private func firestoreValueOrFail(_ value: Any) -> firebase.firestore.FieldValue {
     guard let value = FirestoreDataConverter.firestoreValue(field: value) else {
-      fatalError("Unexpected value type")
+      fatalError("Unexpected value type: \(type(of: value))")
     }
     return value
   }
