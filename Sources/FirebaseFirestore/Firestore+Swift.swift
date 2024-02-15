@@ -47,14 +47,16 @@ extension Firestore {
     let context = TransactionContext(updateBlock: updateBlock)
     let boxed = Unmanaged.passRetained(context as AnyObject)
     let future = swift_firebase.swift_cxx_shims.firebase.firestore.firestore_run_transaction(
-      self, options, { transaction, pvUpdateBlock in
-        let context = Unmanaged<AnyObject>.fromOpaque(pvUpdateBlock!).takeUnretainedValue() as! TransactionContext
+      self, options ?? .init(), { transaction, pErrorMessage, pvUpdateBlock in
+        let _ = Unmanaged<AnyObject>.fromOpaque(pvUpdateBlock!).takeUnretainedValue() as! TransactionContext
 
-        context.result = context.updateBlock(transaction, nil)
+        //context.result = context.updateBlock(transaction, nil)
 
-        return 0 // XXX
+        //pErrorMessage.pointee.clear()
+
+        return 0 // firebase.firestore.kErrorNone
       },
-      UnsafeMutableRawPointer(boxed.toOpaque())
+      boxed.toOpaque()
     )
     future.setCompletion({
       completion(context.result, context.error)

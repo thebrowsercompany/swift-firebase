@@ -3,11 +3,13 @@
 #ifndef firebase_include_FirebaseFirestore_hh
 #define firebase_include_FirebaseFirestore_hh
 
-#include <memory>
+#include <string>
+#include <utility>
 
 #include <firebase/firestore.h>
 
 #include "FirebaseCore.hh"
+#include "TransactionWeakReference.hh"
 
 // Functions defined in this namespace are used to get around the lack of
 // virtual function support currently in Swift. As that support changes
@@ -15,30 +17,36 @@
 namespace swift_firebase::swift_cxx_shims::firebase::firestore {
 
 inline ::firebase::firestore::Settings
-firestore_settings(::firebase::firestore::Firestore *firestore) {
+firestore_settings(::firebase::firestore::Firestore* firestore) {
   return firestore->settings();
 }
 
 inline ::firebase::firestore::DocumentReference
-firestore_document(::firebase::firestore::Firestore *firestore,
+firestore_document(::firebase::firestore::Firestore* firestore,
                    const ::std::string &document_path) {
   return firestore->Document(document_path);
 }
 
 inline ::firebase::firestore::CollectionReference
-firestore_collection(::firebase::firestore::Firestore *firestore,
+firestore_collection(::firebase::firestore::Firestore* firestore,
                      const ::std::string &collection_path) {
   return firestore->Collection(collection_path);
 }
 
-/*
-inline ::swift_firebase::swift_cxx_shims::firebase::Future<void>
+typedef int (*FirebaseRunTransactionUpdateCallback)(
+    TransactionWeakReference* transaction,
+    std::string& error_message,
+    void *user_data);
+inline ::swift_firebase::swift_cxx_shims::firebase::VoidFuture
 firestore_run_transaction(
-*/
+    ::firebase::firestore::Firestore* firestore,
+    ::firebase::firestore::TransactionOptions options,
+    FirebaseRunTransactionUpdateCallback update_callback,
+    void* user_data);
 
 // MARK: - DocumentReference
 
-inline ::firebase::firestore::Firestore *
+inline ::firebase::firestore::Firestore*
 document_firestore(::firebase::firestore::DocumentReference document) {
   return document.firestore();
 }
@@ -288,35 +296,6 @@ query_snapshot_size(const ::firebase::firestore::QuerySnapshot& snapshot) {
 }
 
 // MARK: Transaction
-
-// Transaction is non-copyable so we need a wrapper type that is copyable.
-// This type will hold a valid Transaction during the scope of a RunTransaction
-// callback (see Firestore+Swift.swift for details).
-class TransactionWeakReference {
- public:
-  ~TransactionWeakReference() = default;
-
-  TransactionWeakReference(const TransactionWeakReference& other)
-      : container_(other.container_) {}
-  TransactionWeakReference& operator=(const TransactionWeakReference& other) {
-    container_ = other.container_;
-    return *this;
-  }
-
-  TransactionWeakReference(::firebase::firestore::Transaction* transaction = nullptr)
-      : container_(std::make_shared<Container>(transaction)) {}
-  void reset() {
-    container_->transaction = nullptr;
-  }
-
- private:
-  struct Container {
-    Container(::firebase::firestore::Transaction* transaction)
-        : transaction(transaction) {}
-    ::firebase::firestore::Transaction* transaction;
-  };
-  std::shared_ptr<Container> container_;
-};
 
 } // namespace swift_firebase::swift_cxx_shims::firebase::firestore
 

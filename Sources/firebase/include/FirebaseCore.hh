@@ -31,6 +31,10 @@ class __attribute__((swift_attr("conforms_to:FirebaseCore.FutureProtocol")))
   }
 };
 
+// As a workaround, use `int` here instead of `void` for futures with no
+// result. Swift is not able to handle a `ResultType` of `void`.
+typedef Future<int> VoidFuture;
+
 } // namespace swift_firebase::swift_cxx_shims::firebase
 
 #endif
