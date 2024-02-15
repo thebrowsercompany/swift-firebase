@@ -58,6 +58,10 @@ extension Firestore {
         // It is expected to run `updateBlock` on whatever thread this happens to be. This is
         // consistent with the behavior of the ObjC API as well.
 
+        // Since we could run `updateBlock` multiple times, we need to take care to reset any
+        // residue from previous runs. That means clearing out this error field.
+        context.error = nil
+
         withUnsafePointer(to: context.error) { pError in
           context.result = context.updateBlock(transaction!.pointee, pError)
         }
