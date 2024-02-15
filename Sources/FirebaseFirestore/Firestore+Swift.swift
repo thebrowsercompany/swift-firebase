@@ -76,6 +76,10 @@ extension Firestore {
     })
   }
 
+  public func batch() -> WriteBatch {
+    swift_firebase.swift_cxx_shims.firebase.firestore.firestore_batch(self)
+  }
+
   private typealias TransactionUpdateBlock = (Transaction, UnsafePointer<NSError?>?) -> Any?
 
   private class TransactionContext {
@@ -87,11 +91,6 @@ extension Firestore {
       self.updateBlock = updateBlock
     }
   }
-
-  /* TODO: Implement this.
-  public func batch() -> WriteBatch {
-  }
-  */
 }
 
 // An extension that adds the encoder and decoder functions required

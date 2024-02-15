@@ -14,6 +14,7 @@ extension Transaction {
   }
 
   public mutating func setData(_ data: [String : Any], forDocument document: DocumentReference, merge: Bool) -> Transaction {
+    assert(is_valid())
     self.Set(document, FirestoreDataConverter.firestoreValue(document: data), merge ? .Merge() : .init())
     return self
   }
@@ -24,16 +25,20 @@ extension Transaction {
   */
 
   public mutating func updateData(_ fields: [String : Any], forDocument document: DocumentReference) -> Transaction {
+    assert(is_valid())
     self.Update(document, FirestoreDataConverter.firestoreValue(document: fields))
     return self
   }
 
   public mutating func deleteDocument(_ document: DocumentReference) -> Transaction {
+    assert(is_valid())
     Delete(document)
     return self
   }
 
   public mutating func getDocument(_ document: DocumentReference) throws -> DocumentSnapshot {
+    assert(is_valid())
+
     var error = firebase.firestore.kErrorNone
     var errorMessage = std.string()
 
