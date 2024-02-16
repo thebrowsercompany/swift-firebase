@@ -23,3 +23,9 @@ extension CollectionReference: QueryProtocol {
     swift_firebase.swift_cxx_shims.firebase.firestore.collection_as_query(self)
   }
 }
+
+extension CollectionReference: QueryProtocol {
+  public var _asQuery: Query {
+    swift_firebase.swift_cxx_shims.firebase.firestore.collection_as_query(self)
+  }
+}

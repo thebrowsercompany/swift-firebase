@@ -14,8 +14,6 @@ public typealias Query = firebase.firestore.Query
 // functionality of Query. This is needed since structs in Swift do not support
 // inheritance and C++ classes are exposed as structs to Swift.
 public protocol QueryProtocol {
-  // This is an internal means to expose `Query` when the conforming type is
-  // intended to be a subclass of `Query`.
   var _asQuery: Query { get }
 }
 
