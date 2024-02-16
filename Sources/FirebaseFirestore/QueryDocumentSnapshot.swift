@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: BSD-3-Clause
 
+// Wraps a DocumentSnapshot providing a `data(with:)` implementation that
+// cannot return `nil`.
 public struct QueryDocumentSnapshot {
   private let snapshot: DocumentSnapshot
 
@@ -7,11 +9,19 @@ public struct QueryDocumentSnapshot {
     self.snapshot = snapshot
   }
 
-  func data() -> [String : Any] {
-    snapshot.data()!
+  public var reference: DocumentReference {
+    snapshot.reference
   }
 
-  func data(with serverTimestampBehavior: ServerTimestampBehavior) -> [String : Any] {
-    snapshot.data(with: serverTimestampBehavior)!
+  public var exists: Bool {
+    snapshot.exists
+  }
+
+  public var documentID: String {
+    snapshot.documentID
+  }
+
+  func data(with serverTimestampBehavior: ServerTimestampBehavior = .default) -> [String : Any] {
+    snapshot.data(with: serverTimestampBehavior)! // This should never fail
   }
 }
