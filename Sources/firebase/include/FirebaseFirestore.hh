@@ -157,6 +157,11 @@ collection_document(::firebase::firestore::CollectionReference collection,
   return collection.Document(document_path);
 }
 
+inline ::firebase::firestore::Query
+collection_as_query(::firebase::firestore::CollectionReference collection) {
+  return collection;
+}
+
 typedef void (*DocumentSnapshotListenerTypedCallback)(
     const ::firebase::firestore::DocumentSnapshot *snapshot,
     ::firebase::firestore::Error error_code, const char *error_message,
