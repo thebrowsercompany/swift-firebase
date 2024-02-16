@@ -21,7 +21,7 @@ public struct QueryDocumentSnapshot {
     snapshot.documentID
   }
 
-  public func data(with serverTimestampBehavior: ServerTimestampBehavior = .default) -> [String : Any] {
+  public func data(with behavior: ServerTimestampBehavior = .default) -> [String : Any] {
     let data = swift_firebase.swift_cxx_shims.firebase.firestore.document_snapshot_get_data_workaround(snapshot, behavior)
     return FirestoreDataConverter.value(workaround: data)
   }
