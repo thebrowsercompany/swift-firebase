@@ -43,10 +43,10 @@ extension Firestore {
     runTransaction(with: nil, block: updateBlock, completion: completion)
   }
 
-  public func runTransaction<ResultType>(
+  public func runTransaction(
     with options: TransactionOptions?,
-    block updateBlock: @escaping (Transaction, NSErrorPointer) -> ResultType?,
-    completion: @escaping (ResultType?, Error?) -> Void
+    block updateBlock: @escaping (Transaction, NSErrorPointer) -> Any?,
+    completion: @escaping (Any?, Error?) -> Void
   ) {
     let context = TransactionContext(updateBlock: updateBlock)
     let boxed = Unmanaged.passRetained(context as AnyObject)
@@ -73,7 +73,7 @@ extension Firestore {
       boxed.toOpaque()
     )
     future.setCompletion({
-      completion(context.result as? ResultType, context.error)
+      completion(context.result, context.error)
       boxed.release()
     })
   }
