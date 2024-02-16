@@ -21,7 +21,7 @@ public struct QueryDocumentSnapshot {
     snapshot.documentID
   }
 
-  func data(with serverTimestampBehavior: ServerTimestampBehavior = .default) -> [String : Any] {
+  public func data(with serverTimestampBehavior: ServerTimestampBehavior = .default) -> [String : Any] {
     snapshot.data(with: serverTimestampBehavior)! // This should never fail
   }
 }
