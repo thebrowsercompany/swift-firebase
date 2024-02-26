@@ -39,15 +39,15 @@ extension Firestore {
     swift_firebase.swift_cxx_shims.firebase.firestore.firestore_collection(self, std.string(collectionPath))
   }
 
-  public func runTransaction<Result>(_ updateBlock: @escaping (Transaction, NSErrorPointer) -> Result?, completion: @escaping (Result?, Error?) -> Void) {
-    runTransactionHelper(with: nil, block: updateBlock, completion: completion as! ((Any?, Error?) -> Void))
+  public func runTransaction<Result>(_ updateBlock: @escaping (Transaction, NSErrorPointer) -> Result, completion: @escaping (Any?, Error?) -> Void) {
+    runTransaction(with: nil, block: updateBlock, completion: completion)
   }
 
-  public func runTransaction<Result>(with options: TransactionOptions?, block updateBlock: @escaping (Transaction, NSErrorPointer) -> Result?, completion: @escaping (Result?, Error?) -> Void) {
-    runTransactionHelper(with: nil, block: updateBlock, completion: completion as! ((Any?, Error?) -> Void))
+  public func runTransaction<Result>(_ updateBlock: @escaping (Transaction, NSErrorPointer) -> Result?, completion: @escaping (Any?, Error?) -> Void) {
+    runTransaction(with: nil, block: updateBlock, completion: completion)
   }
 
-  private func runTransactionHelper(
+  public func runTransaction(
     with options: TransactionOptions?,
     block updateBlock: @escaping (Transaction, NSErrorPointer) -> Any?,
     completion: @escaping (Any?, Error?) -> Void
