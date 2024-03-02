@@ -20,3 +20,5 @@ public struct FirestoreErrorCode: Error {
     self.init(actualError, errorMessage: errorMessageString)
   }
 }
+
+extension FirestoreErrorCode: Equatable {}
