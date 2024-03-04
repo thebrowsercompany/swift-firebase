@@ -26,22 +26,22 @@ extension FirestoreErrorCode: Equatable {}
 // Unfortunately `Error` is not defined as a `enum class` so we need to add
 // these wrappers.
 extension FirestoreErrorCode.Code {
-  static var ok: Self { firebase.firestore.kErrorOk }
-  static var none: Self { firebase.firestore.kErrorNone }
-  static var cancelled: Self { firebase.firestore.kErrorCancelled }
-  static var unknown: Self { firebase.firestore.kErrorUnknown }
-  static var invalidArgument: Self { firebase.firestore.kErrorInvalidArgument }
-  static var deadlineExceeded: Self { firebase.firestore.kErrorDeadlineExceeded }
-  static var notFound: Self { firebase.firestore.kErrorNotFound }
-  static var alreadyExists: Self { firebase.firestore.kErrorAlreadyExists }
-  static var permissionDenied: Self { firebase.firestore.kErrorPermissionDenied }
-  static var resourceExhausted: Self { firebase.firestore.kErrorResourceExhausted }
-  static var failedPrecondition: Self { firebase.firestore.kErrorFailedPrecondition }
-  static var aborted: Self { firebase.firestore.kErrorAborted }
-  static var outOfRange: Self { firebase.firestore.kErrorOutOfRange }
-  static var unimplemented: Self { firebase.firestore.kErrorUnimplemented }
-  static var `internal`: Self { firebase.firestore.kErrorInternal }
-  static var unavailable: Self { firebase.firestore.kErrorUnavailable }
-  static var dataLoss: Self { firebase.firestore.kErrorDataLoss }
-  static var unauthenticated: Self { firebase.firestore.kErrorUnauthenticated }
+  public static var ok: Self { firebase.firestore.kErrorOk }
+  public static var none: Self { firebase.firestore.kErrorNone }
+  public static var cancelled: Self { firebase.firestore.kErrorCancelled }
+  public static var unknown: Self { firebase.firestore.kErrorUnknown }
+  public static var invalidArgument: Self { firebase.firestore.kErrorInvalidArgument }
+  public static var deadlineExceeded: Self { firebase.firestore.kErrorDeadlineExceeded }
+  public static var notFound: Self { firebase.firestore.kErrorNotFound }
+  public static var alreadyExists: Self { firebase.firestore.kErrorAlreadyExists }
+  public static var permissionDenied: Self { firebase.firestore.kErrorPermissionDenied }
+  public static var resourceExhausted: Self { firebase.firestore.kErrorResourceExhausted }
+  public static var failedPrecondition: Self { firebase.firestore.kErrorFailedPrecondition }
+  public static var aborted: Self { firebase.firestore.kErrorAborted }
+  public static var outOfRange: Self { firebase.firestore.kErrorOutOfRange }
+  public static var unimplemented: Self { firebase.firestore.kErrorUnimplemented }
+  public static var `internal`: Self { firebase.firestore.kErrorInternal }
+  public static var unavailable: Self { firebase.firestore.kErrorUnavailable }
+  public static var dataLoss: Self { firebase.firestore.kErrorDataLoss }
+  public static var unauthenticated: Self { firebase.firestore.kErrorUnauthenticated }
 }
