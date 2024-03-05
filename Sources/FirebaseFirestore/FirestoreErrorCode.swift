@@ -20,8 +20,8 @@ public struct FirestoreErrorCode: Error {
     self.init(actualError, errorMessage: errorMessageString)
   }
 
-  public init(_ error: FirestoreErrorCode) {
-    self.init(error.code, errorMessage: error.localizedDescription)
+  public init(_ code: FirestoreErrorCode.Code) {
+    self.init(code, errorMessage: nil)
   }
 }
 
