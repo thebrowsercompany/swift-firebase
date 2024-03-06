@@ -13,6 +13,6 @@ public typealias Credential = UnsafeMutablePointer<firebase.auth.Credential>
 
 extension EmailAuthProvider {
     func credential(withEmail email: String, password: String) -> Credential {
-        GetCredential(email, password)
+        firebase.auth.EmailAuthProvider.GetCredential(email, password)
     }
 }

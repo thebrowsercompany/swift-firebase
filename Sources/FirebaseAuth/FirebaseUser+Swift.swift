@@ -89,7 +89,7 @@ extension User {
       -> AuthResult {
       typealias Promise = CheckedContinuation<firebase.auth.AuthResult, any Error>
       return try await withCheckedThrowingContinuation { (continuation: Promise) in
-        let future = self.ReauthenticateAndRetrieveData(credential)
+        let future = self.ReauthenticateAndRetrieveData(credential.pointee)
         withUnsafePointer(to: continuation) { continuation in
           future.OnCompletion_SwiftWorkaround({ future, pvContinuation in
             let pContinuation = pvContinuation?.assumingMemoryBound(to: Promise.self)
