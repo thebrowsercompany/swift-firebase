@@ -6,7 +6,7 @@ public struct FirestoreErrorCode: Error {
   public let code: Code
   public let localizedDescription: String
 
-  init(_ error: firebase.firestore.Error, errorMessage: String?) {
+  public init(_ error: firebase.firestore.Error, errorMessage: String? = nil) {
     code = error
     localizedDescription = errorMessage ?? "\(code.rawValue)"
   }
@@ -18,10 +18,6 @@ public struct FirestoreErrorCode: Error {
       errorMessageString = .init(cString: errorMessage)
     }
     self.init(actualError, errorMessage: errorMessageString)
-  }
-
-  public init(_ code: FirestoreErrorCode.Code) {
-    self.init(code, errorMessage: nil)
   }
 }
 
