@@ -8,11 +8,11 @@ import FirebaseCore
 import CxxShim
 import Foundation
 
-public typealias EmailAuthProvider = UnsafeMutablePointer<firebase.auth.EmailAuthProvider>
-public typealias Credential = UnsafeMutablePointer<firebase.auth.Credential>
+public typealias EmailAuthProvider = firebase.auth.EmailAuthProvider
+public typealias Credential = firebase.auth.Credential
 
 extension EmailAuthProvider {
-    func credential(withEmail email: String, password: String) -> Credential {
-        firebase.auth.EmailAuthProvider.GetCredential(email, password)
+    static func credential(withEmail email: String, password: String) -> Credential {
+        GetCredential(email, password)
     }
 }
