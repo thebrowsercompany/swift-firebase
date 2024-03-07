@@ -367,7 +367,8 @@ write_batch_delete(
 
 inline ::swift_firebase::swift_cxx_shims::firebase::VoidFuture
 write_batch_commit(::firebase::firestore::WriteBatch write_batch) {
-  return ::swift_firebase::swift_cxx_shims::firebase::VoidFuture::From(write_batch.Commit());
+  return ::swift_firebase::swift_cxx_shims::firebase::VoidFuture::From(
+      write_batch.Commit());
 }
 
 } // namespace swift_firebase::swift_cxx_shims::firebase::firestore

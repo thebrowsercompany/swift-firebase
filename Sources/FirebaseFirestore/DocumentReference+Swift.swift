@@ -84,8 +84,10 @@ extension DocumentReference {
 
   public func setData(_ data: [String: Any], merge: Bool = false, completion: ((Error?) -> Void)?) {
     setDataImpl(data, merge: merge) { error in
-      DispatchQueue.main.async {
-        completion?(error)
+      if let completion {
+        DispatchQueue.main.async {
+          completion(error)
+        }
       }
     }
   }
