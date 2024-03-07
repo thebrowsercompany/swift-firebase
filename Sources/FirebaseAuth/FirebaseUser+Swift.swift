@@ -20,6 +20,7 @@ public protocol UserInfo {
   var phoneNumber: String? { get }
 }
 
+// TODO(WPP-1581): Improve the API to match the ObjC one better.
 extension User {
   public var isAnonymous: Bool {
     self.is_anonymous()
