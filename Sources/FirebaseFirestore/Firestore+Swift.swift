@@ -14,6 +14,12 @@ public typealias Firestore = UnsafeMutablePointer<firebase.firestore.Firestore>
 // That type is specific to the ObjC runtime, so we don't have access to it. Use this instead.
 public typealias NSErrorPointer = UnsafeMutablePointer<NSError?>?
 
+public var shouldThrow = true
+
+public struct Blarg: Error {
+  var localizedDescription: String { "Blarg" }
+}
+
 extension Firestore {
   public static func firestore() -> Firestore {
     guard let application = firebase.App.GetInstance() else {
@@ -75,6 +81,15 @@ extension Firestore {
 
         return context.error == nil ? firebase.firestore.kErrorNone : firebase.firestore.kErrorCancelled
         */
+        
+        do {
+          if shouldThrow {
+            throw Blarg()
+          }
+          print(">>> transaction")
+        } catch {
+          print(">>> caught error")
+        }
 
         return firebase.firestore.kErrorNone
       },
