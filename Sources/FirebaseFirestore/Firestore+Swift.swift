@@ -70,7 +70,7 @@ extension Firestore {
         // residue from previous runs. That means clearing out this error field.
         context.error = nil
 
-        context.result = context.updateBlock(transaction!.pointee, &context.error)
+        context.result = context.updateBlock(transaction!.pointee, nil)
 
         return context.error == nil ? firebase.firestore.kErrorNone : firebase.firestore.kErrorCancelled
       },
