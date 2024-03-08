@@ -56,6 +56,7 @@ extension Firestore {
     let boxed = Unmanaged.passRetained(context as AnyObject)
     let future = swift_firebase.swift_cxx_shims.firebase.firestore.firestore_run_transaction(
       self, options ?? .init(), { transaction, pErrorMessage, pvUpdateBlock in
+        /*
         let context = Unmanaged<AnyObject>.fromOpaque(pvUpdateBlock!).takeUnretainedValue() as! TransactionContext
 
         // Instead of trying to relay the generated `NSError` through firebase's `Error` type
@@ -73,6 +74,9 @@ extension Firestore {
         context.result = context.updateBlock(transaction!.pointee, nil)
 
         return context.error == nil ? firebase.firestore.kErrorNone : firebase.firestore.kErrorCancelled
+        */
+
+        return firebase.firestore.kErrorNone
       },
       boxed.toOpaque()
     )
