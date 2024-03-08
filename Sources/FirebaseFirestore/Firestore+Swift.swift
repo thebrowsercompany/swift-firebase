@@ -14,12 +14,6 @@ public typealias Firestore = UnsafeMutablePointer<firebase.firestore.Firestore>
 // That type is specific to the ObjC runtime, so we don't have access to it. Use this instead.
 public typealias NSErrorPointer = UnsafeMutablePointer<NSError?>?
 
-public var shouldThrow = true
-
-public struct Blarg: Error {
-  var localizedDescription: String { "Blarg" }
-}
-
 extension Firestore {
   public static func firestore() -> Firestore {
     guard let application = firebase.App.GetInstance() else {
@@ -62,7 +56,6 @@ extension Firestore {
     let boxed = Unmanaged.passRetained(context as AnyObject)
     let future = swift_firebase.swift_cxx_shims.firebase.firestore.firestore_run_transaction(
       self, options ?? .init(), { transaction, pErrorMessage, pvUpdateBlock in
-        /*
         let context = Unmanaged<AnyObject>.fromOpaque(pvUpdateBlock!).takeUnretainedValue() as! TransactionContext
 
         // Instead of trying to relay the generated `NSError` through firebase's `Error` type
@@ -80,18 +73,6 @@ extension Firestore {
         context.result = context.updateBlock(transaction!.pointee, nil)
 
         return context.error == nil ? firebase.firestore.kErrorNone : firebase.firestore.kErrorCancelled
-        */
-        
-        do {
-          if shouldThrow {
-            throw Blarg()
-          }
-          print(">>> transaction")
-        } catch {
-          print(">>> caught error")
-        }
-
-        return firebase.firestore.kErrorNone
       },
       boxed.toOpaque()
     )
