@@ -11,11 +11,11 @@ extension FirebaseApp {
   }
 
   public static func configure(options: FirebaseOptions) {
-    _ = firebase.App.Create(options.pointee)
+    _ = firebase.App.Create(options.impl.pointee)
   }
 
   public static func configure(name: String, options: FirebaseOptions) {
-    _ = firebase.App.Create(options.pointee, name)
+    _ = firebase.App.Create(options.impl.pointee, name)
   }
 
   public static func app() -> FirebaseApp? {
@@ -26,7 +26,7 @@ extension FirebaseApp {
     firebase.App.GetInstance(name)
   }
 
-  public static var allApps: [String:FirebaseApp]? {
+  public static var allApps: [String: FirebaseApp]? {
     let applications = firebase.App.GetApps()
     guard !applications.isEmpty else { return nil }
     return .init(uniqueKeysWithValues: applications.compactMap {
@@ -43,9 +43,8 @@ extension FirebaseApp {
     String(cString: self.pointee.__nameUnsafe()!)
   }
 
-  public var options: UnsafePointer<firebase.AppOptions> {
-    // TODO(compnerd) ensure that the `FirebaseOptions` API is applied to this.
-    self.pointee.__optionsUnsafe()
+  public var options: FirebaseOptions {
+    FirebaseOptions(self.pointee.__optionsUnsafe())
   }
 
   public var isDataCollectionDefaultEnabled: Bool {

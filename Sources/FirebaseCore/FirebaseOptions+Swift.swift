@@ -5,93 +5,78 @@ import firebase
 
 import Foundation
 
-public typealias FirebaseOptions = UnsafeMutablePointer<firebase.AppOptions>
+public struct FirebaseOptions {
+  let impl: UnsafeMutablePointer<firebase.AppOptions>
 
-extension firebase.AppOptions: CustomDebugStringConvertible {
-  public var debugDescription: String {
-    """
-    AppOptions {
-      package_name_: "\(String(cString: self.__package_nameUnsafe()))"
-      api_key_: "\(String(cString: self.__api_keyUnsafe()))"
-      app_id_: "\(String(cString: self.__app_idUnsafe()))"
-      client_id_: "\(String(cString: self.__client_idUnsafe()))"
-      database_url_: "\(String(cString: self.__database_urlUnsafe()))"
-      ga_tracking_id_: "\(String(cString: self.__ga_tracking_idUnsafe()))"
-      fcm_sender_id_: "\(String(cString: self.__messaging_sender_idUnsafe()))"
-      storage_bucket_: "\(String(cString: self.__storage_bucketUnsafe()))"
-      project_id_: "\(String(cString: self.__project_idUnsafe()))"
-    }
-    """
-  }
-}
-
-extension FirebaseOptions {
   public static func defaultOptions() -> FirebaseOptions {
     guard let options = firebase.AppOptions.LoadDefault(nil) else {
       fatalError("unable to deserialise firebase options")
     }
-    return options
+    return FirebaseOptions(options)
+  }
+
+  init(_ impl: UnsafeMutablePointer<firebase.AppOptions>) {
+    self.impl = impl
   }
 
   public init?(contentsOfFile plistPath: String) {
-    fatalError("\(#function) NYI")
+    fatalError("Use FirebaseOptions(_contentsOfFile:format:) instead")
     return nil
   }
 
   public init(googleAppID: String, gcmSenderID GCMSenderID: String) {
-    self = .allocate(capacity: 1)
-    self.initialize(to: firebase.AppOptions())
+    self.init(firebase.AppOptions())
     self.googleAppID = googleAppID
     self.gcmSenderID = GCMSenderID
   }
 
   public var apiKey: String? {
     get {
-      guard let value = self.pointee.__api_keyUnsafe() else { return nil }
+      guard let value = impl.pointee.__api_keyUnsafe() else { return nil }
       return String(cString: value)
     }
-    set { self.pointee.set_api_key(newValue) }
+    set { impl.pointee.set_api_key(newValue) }
   }
 
   public var bundleID: String {
     get {
-      guard let value = self.pointee.__package_nameUnsafe() else {
+      guard let value = impl.pointee.__package_nameUnsafe() else {
         return Bundle.main.bundleIdentifier!
       }
       return String(cString: value)
     }
-    set { self.pointee.set_package_name(newValue) }
+    set { impl.pointee.set_package_name(newValue) }
   }
 
   public var clientID: String? {
     get {
-      guard let value = self.pointee.__client_idUnsafe() else { return nil }
+      guard let value = impl.pointee.__client_idUnsafe() else { return nil }
       return String(cString: value)
     }
-    set { self.pointee.set_client_id(newValue) }
+    set { impl.pointee.set_client_id(newValue) }
   }
 
   public var trackingID: String? {
     get {
-      guard let value = self.pointee.__ga_tracking_idUnsafe() else {
+      guard let value = impl.pointee.__ga_tracking_idUnsafe() else {
         return nil
       }
       return String(cString: value)
     }
-    set { self.pointee.set_ga_tracking_id(newValue) }
+    set { impl.pointee.set_ga_tracking_id(newValue) }
   }
 
   public var gcmSenderID: String {
-    get { String(cString: self.pointee.__messaging_sender_idUnsafe()!) }
-    set { self.pointee.set_messaging_sender_id(newValue) }
+    get { String(cString: impl.pointee.__messaging_sender_idUnsafe()!) }
+    set { impl.pointee.set_messaging_sender_id(newValue) }
   }
 
   public var projectID: String? {
     get {
-      guard let value = self.pointee.__project_idUnsafe() else { return nil }
+      guard let value = impl.pointee.__project_idUnsafe() else { return nil }
       return String(cString: value)
     }
-    set { self.pointee.set_project_id(newValue) }
+    set { impl.pointee.set_project_id(newValue) }
   }
 
   @available(*, unavailable)
@@ -99,18 +84,18 @@ extension FirebaseOptions {
 
   public var googleAppID: String? {
     get {
-      guard let value = self.pointee.__app_idUnsafe() else { return nil }
+      guard let value = impl.pointee.__app_idUnsafe() else { return nil }
       return String(cString: value)
     }
-    set { self.pointee.set_app_id(newValue) }
+    set { impl.pointee.set_app_id(newValue) }
   }
 
   public var databaseURL: String? {
     get {
-      guard let value = self.pointee.__database_urlUnsafe() else { return nil }
+      guard let value = impl.pointee.__database_urlUnsafe() else { return nil }
       return String(cString: value)
     }
-    set { self.pointee.set_database_url(newValue) }
+    set { impl.pointee.set_database_url(newValue) }
   }
 
   @available(*, unavailable)
@@ -118,16 +103,33 @@ extension FirebaseOptions {
 
   public var storageBucket: String? {
     get {
-      guard let value = self.pointee.__storage_bucketUnsafe() else {
+      guard let value = impl.pointee.__storage_bucketUnsafe() else {
         return nil
       }
       return String(cString: value)
     }
-    set { self.pointee.set_storage_bucket(newValue) }
+    set { impl.pointee.set_storage_bucket(newValue) }
   }
 
   @available(*, unavailable)
   public var appGroupId: String? { nil }
+}
+
+extension FirebaseOptions: CustomDebugStringConvertible {
+  public var debugDescription: String {
+    """
+    AppOptions {
+      api_key_: "\(String(cString: impl.__api_keyUnsafe()))"
+      app_id_: "\(String(cString: impl.__app_idUnsafe()))"
+      client_id_: "\(String(cString: impl.__client_idUnsafe()))"
+      database_url_: "\(String(cString: impl.__database_urlUnsafe()))"
+      ga_tracking_id_: "\(String(cString: impl.__ga_tracking_idUnsafe()))"
+      fcm_sender_id_: "\(String(cString: impl.__messaging_sender_idUnsafe()))"
+      storage_bucket_: "\(String(cString: impl.__storage_bucketUnsafe()))"
+      project_id_: "\(String(cString: impl.__project_idUnsafe()))"
+    }
+    """
+  }
 }
 
 extension FirebaseOptions {
@@ -144,12 +146,12 @@ extension FirebaseOptions {
   public init?(_contentsOfFile path: URL, format: ConfigFormat) {
     guard let data = try? Data(contentsOf: path, options: .alwaysMapped) else { return nil }
     switch format {
-      case .json:
-        let config = String(data: data, encoding: .utf8)
-        guard let options = firebase.AppOptions.LoadFromJsonConfig(config, nil) else {
-          return nil
-        }
-        self = options
+    case .json:
+      let config = String(data: data, encoding: .utf8)
+      guard let options = firebase.AppOptions.LoadFromJsonConfig(config, nil) else {
+        return nil
+      }
+      self = .init(options)
     }
   }
 }
