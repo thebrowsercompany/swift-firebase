@@ -105,7 +105,7 @@ public final class Auth {
       let (result, error) = future.resultAndError
       var providers: [String]?
       if let result {
-        providers = result.providers.compactMap(String.init)
+        providers = result.providers.map(String.init)
       } else {
         providers = nil
       }
