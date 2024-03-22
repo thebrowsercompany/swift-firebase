@@ -16,7 +16,7 @@ public enum AuthAPNSTokenType: Int {
 }
 
 public final class Auth {
-  let impl: UnsafeMutablePointer<firebase.auth.Auth> 
+  let impl: UnsafeMutablePointer<firebase.auth.Auth>
 
   init(_ impl: UnsafeMutablePointer<firebase.auth.Auth>) {
     self.impl = impl
@@ -105,7 +105,7 @@ public final class Auth {
       let (result, error) = future.resultAndError
       var providers: [String]?
       if let result {
-        providers = result.providers.map(String.init)
+        providers = result.providers.compactMap(String.init)
       } else {
         providers = nil
       }
