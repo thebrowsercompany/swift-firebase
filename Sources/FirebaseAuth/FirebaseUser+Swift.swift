@@ -234,6 +234,10 @@ public final class User {
   //   fatalError("\(#function) not yet implemented")
   // }
 
+  public func delete(completion: ((Error?) -> Void)?) {
+    fatalError("\(#function) not yet implemented")
+  }
+
   public func delete() async throws {
     fatalError("\(#function) not yet implemented")
   }
