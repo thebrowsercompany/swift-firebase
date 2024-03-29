@@ -144,6 +144,10 @@ public final class User {
     return try await AuthTokenResult(idTokenForcingRefresh(forceRefresh))
   }
 
+  public func getIDToken(completion: ((String?, Error?) -> Void)?) {
+    idTokenForcingRefresh(false, completion: completion)
+  }
+
   public func getIDToken() async throws -> String {
     return try await idTokenForcingRefresh(false)
   }
