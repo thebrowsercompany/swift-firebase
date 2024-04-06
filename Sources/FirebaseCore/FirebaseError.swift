@@ -1,12 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
 
-public struct FirebaseError: Error {
-  public let code: CInt
-  public let message: String
-
-  @_spi(FirebaseInternal)
-  public init(code: CInt, message: String) {
-    self.code = code
-    self.message = message
-  }
+public protocol FirebaseError: Error {
+  init(code: Int32, message: String)
 }
