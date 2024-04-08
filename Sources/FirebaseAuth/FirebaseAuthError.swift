@@ -137,6 +137,7 @@ extension AuthErrorCode {
 extension AuthErrorCode: Equatable {}
 
 extension AuthErrorCode {
+  // The Obj C API provides this type as well, so provide it here for consistency.
   public typealias Code = AuthErrorCode
 
   // This allows us to re-expose self as a code similarly

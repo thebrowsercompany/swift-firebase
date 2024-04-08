@@ -67,6 +67,7 @@ extension FirestoreErrorCode {
 extension FirestoreErrorCode: Equatable {}
 
 extension FirestoreErrorCode {
+  // The Obj C API provides this type as well, so provide it here for consistency.
   public typealias Code = FirestoreErrorCode
 
   // This allows us to re-expose self as a code similarly
