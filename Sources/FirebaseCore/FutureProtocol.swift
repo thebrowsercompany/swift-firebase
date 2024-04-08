@@ -47,8 +47,8 @@ public extension FutureProtocol {
     return String(cString: errorMessageUnsafe)
   }
 
-  func resultAndError<ErrorType>(constructError: ((Int32, String)) -> ErrorType) -> (ResultType?, ErrorType?) {
-    let error = error()
+  func resultAndError<ErrorType>(_ constructError: ((Int32, String)) -> ErrorType) -> (ResultType?, ErrorType?) {
+    let error = self.error()
     guard error == 0 else {
       return (nil, constructError((code: error, message: errorMessage!)))
     }
