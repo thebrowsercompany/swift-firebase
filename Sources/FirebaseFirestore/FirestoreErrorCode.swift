@@ -43,24 +43,24 @@ extension FirestoreErrorCode {
 }
 
 extension FirestoreErrorCode {
-  public static let ok: Self = .init(firebase.firestore.kErrorOk)
-  public static let none: Self = .init(firebase.firestore.kErrorNone)
-  public static let cancelled: Self = .init(firebase.firestore.kErrorCancelled)
-  public static let unknown: Self = .init(firebase.firestore.kErrorUnknown)
-  public static let invalidArgument: Self = .init(firebase.firestore.kErrorInvalidArgument)
-  public static let deadlineExceeded: Self = .init(firebase.firestore.kErrorDeadlineExceeded)
-  public static let notFound: Self = .init(firebase.firestore.kErrorNotFound)
-  public static let alreadyExists: Self = .init(firebase.firestore.kErrorAlreadyExists)
-  public static let permissionDenied: Self = .init(firebase.firestore.kErrorPermissionDenied)
-  public static let resourceExhausted: Self = .init(firebase.firestore.kErrorResourceExhausted)
-  public static let failedPrecondition: Self = .init(firebase.firestore.kErrorFailedPrecondition)
-  public static let aborted: Self = .init(firebase.firestore.kErrorAborted)
-  public static let outOfRange: Self = .init(firebase.firestore.kErrorOutOfRange)
-  public static let unimplemented: Self = .init(firebase.firestore.kErrorUnimplemented)
-  public static let `internal`: Self = .init(firebase.firestore.kErrorInternal)
-  public static let unavailable: Self = .init(firebase.firestore.kErrorUnavailable)
-  public static let dataLoss: Self = .init(firebase.firestore.kErrorDataLoss)
-  public static let unauthenticated: Self = .init(firebase.firestore.kErrorUnauthenticated)
+  public static var ok: Self { .init(firebase.firestore.kErrorOk) }
+  public static var none: Self { .init(firebase.firestore.kErrorNone) }
+  public static var cancelled: Self { .init(firebase.firestore.kErrorCancelled) }
+  public static var unknown: Self { .init(firebase.firestore.kErrorUnknown) }
+  public static var invalidArgument: Self { .init(firebase.firestore.kErrorInvalidArgument) }
+  public static var deadlineExceeded: Self { .init(firebase.firestore.kErrorDeadlineExceeded) }
+  public static var notFound: Self { .init(firebase.firestore.kErrorNotFound) }
+  public static var alreadyExists: Self { .init(firebase.firestore.kErrorAlreadyExists) }
+  public static var permissionDenied: Self { .init(firebase.firestore.kErrorPermissionDenied) }
+  public static var resourceExhausted: Self { .init(firebase.firestore.kErrorResourceExhausted) }
+  public static var failedPrecondition: Self { .init(firebase.firestore.kErrorFailedPrecondition) }
+  public static var aborted: Self { .init(firebase.firestore.kErrorAborted) }
+  public static var outOfRange: Self { .init(firebase.firestore.kErrorOutOfRange) }
+  public static var unimplemented: Self { .init(firebase.firestore.kErrorUnimplemented) }
+  public static var `internal`: Self { .init(firebase.firestore.kErrorInternal) }
+  public static var unavailable: Self { .init(firebase.firestore.kErrorUnavailable) }
+  public static var dataLoss: Self { .init(firebase.firestore.kErrorDataLoss) }
+  public static var unauthenticated: Self { .init(firebase.firestore.kErrorUnauthenticated) }
 }
 
 extension FirestoreErrorCode: Equatable {}
