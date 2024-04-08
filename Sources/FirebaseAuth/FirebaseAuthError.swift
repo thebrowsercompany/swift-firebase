@@ -5,7 +5,7 @@ import firebase
 @_spi(FirebaseInternal)
 import FirebaseCore
 
-public struct AuthErrorCode: RawRepresentable, FirebaseError {
+public struct AuthErrorCode: RawRepresentable, Error {
   public typealias RawValue = Int
 
   public let rawValue: Int
@@ -16,10 +16,9 @@ public struct AuthErrorCode: RawRepresentable, FirebaseError {
     localizedDescription = "\(rawValue)"
   }
 
-  @_spi(FirebaseInternal)
-  public init(code: Int32, message: String) {
-    self.rawValue = Int(code)
-    localizedDescription = message
+  init(_ params: (code: Int32, message: String)) {
+    self.rawValue = Int(params.code)
+    localizedDescription = params.message
   }
 
   private init(_ error: firebase.auth.AuthError) {

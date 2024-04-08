@@ -5,7 +5,7 @@ import firebase
 @_spi(FirebaseInternal)
 import FirebaseCore
 
-public struct FirestoreErrorCode: RawRepresentable, FirebaseError {
+public struct FirestoreErrorCode: RawRepresentable, Error {
   public typealias RawValue = Int
 
   public let rawValue: Int
@@ -16,10 +16,9 @@ public struct FirestoreErrorCode: RawRepresentable, FirebaseError {
     localizedDescription = "\(rawValue)"
   }
 
-  @_spi(FirebaseInternal)
-  public init(code: Int32, message: String) {
-    self.rawValue = Int(code)
-    localizedDescription = message
+  init(_ params: (code: Int32, message: String)) {
+    self.rawValue = Int(params.code)
+    localizedDescription = params.message
   }
 
   private init(_ error: firebase.firestore.Error) {
@@ -29,7 +28,7 @@ public struct FirestoreErrorCode: RawRepresentable, FirebaseError {
 
 extension FirestoreErrorCode {
   init(_ error: firebase.firestore.Error, errorMessage: String?) {
-    self.init(code: error.rawValue, message: errorMessage ?? "\(error.rawValue)")
+    self.init((code: error.rawValue, message: errorMessage ?? "\(error.rawValue)"))
   }
 
   init?(_ error: firebase.firestore.Error?, errorMessage: UnsafePointer<CChar>?) {

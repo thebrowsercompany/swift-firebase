@@ -47,10 +47,10 @@ public extension FutureProtocol {
     return String(cString: errorMessageUnsafe)
   }
 
-  func resultAndError<ErrorType: FirebaseError>(as errorType: ErrorType.Type) -> (ResultType?, ErrorType?) {
+  func resultAndError<ErrorType>(constructError: ((Int32, String)) -> ErrorType) -> (ResultType?, ErrorType?) {
     let error = error()
     guard error == 0 else {
-      return (nil, ErrorType(code: error, message: errorMessage!))
+      return (nil, constructError((code: error, message: errorMessage!)))
     }
     return (result, nil)
   }
