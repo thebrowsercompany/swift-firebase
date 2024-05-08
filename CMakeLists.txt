@@ -178,6 +178,19 @@ target_link_libraries(FirebaseFirestore PUBLIC
   upb
   zlibstatic)
 
+add_library(FirebaseFunctions SHARED
+  Sources/FirebaseFunctions/Functions+Swift.swift
+  Sources/FirebaseFunctions/FunctionsErrorCode.swift
+  Sources/FirebaseFunctions/HTTPSCallable+Swift.swift
+  Sources/FirebaseFunctions/HTTPSCallableResult+Swift.swift)
+target_compile_options(FirebaseFunctions PRIVATE
+  -cxx-interoperability-mode=default)
+target_link_libraries(FirebaseFunctions PUBLIC
+  firebase
+  FirebaseCore)
+target_link_libraries(FirebaseFunctions PRIVATE
+  firebase_rest_lib)
+
 if(SWIFT_FIREBASE_BUILD_EXAMPLES)
   FetchContent_Declare(SwiftWin32
     GIT_REPOSITORY https://github.com/compnerd/swift-win32
