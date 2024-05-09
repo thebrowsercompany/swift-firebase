@@ -43,6 +43,12 @@ https_callable_call(::firebase::functions::HttpsCallableReference ref,
   return ref.Call(data);
 }
 
+inline ::firebase::Variant
+https_callable_result_data(
+    const ::firebase::functions::HttpsCallableResult& result) {
+  return result.data();
+}
+
 } // namespace swift_firebase::swift_cxx_shims::firebase::functions
 
 #endif

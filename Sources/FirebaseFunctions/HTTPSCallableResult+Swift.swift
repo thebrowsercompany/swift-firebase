@@ -6,11 +6,16 @@ import firebase
 import FirebaseCore
 
 import CxxShim
+import Foundation
 
 public class HTTPSCallableResult {
-  let impl: firebase.functions.HttpsCallableResult
+  let data: Any
 
-  init(_ impl: firebase.functions.HttpsCallableResult = .init()) {
-    self.impl = impl
+  init(_ result: firebase.functions.HttpsCallableResult = .init()) {
+    let variant = swift_firebase.swift_cxx_shims.firebase.functions.https_callable_result_data(result)
+    let data = try! fromVariant(variant)
+
+    // For compatibility with the ObjC API, map nil to NSNull here.
+    self.data = data ?? NSNull()
   }
 }

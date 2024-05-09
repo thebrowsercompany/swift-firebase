@@ -36,8 +36,8 @@ public class HTTPSCallable {
   }
 
   private func callImpl(data: Any?, completion: @escaping (HTTPSCallableResult?, Error?) -> Void) {
-    // XXX pass `data`
-    let future = swift_firebase.swift_cxx_shims.firebase.functions.https_callable_call(impl)
+    let variant = try! toVariant(data)
+    let future = swift_firebase.swift_cxx_shims.firebase.functions.https_callable_call(impl, variant)
     future.setCompletion({
       let (result, error) = future.resultAndError { FunctionsErrorCode($0) }
       completion(result.map { .init($0) }, error)
