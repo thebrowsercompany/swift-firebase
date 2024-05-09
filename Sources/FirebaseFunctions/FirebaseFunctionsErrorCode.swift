@@ -5,7 +5,7 @@ import firebase
 @_spi(FirebaseInternal)
 import FirebaseCore
 
-public struct FunctionsErrorCode: Error {
+public struct FirebaseFunctionsErrorCode: Error {
   public let rawValue: Int
   public let localizedDescription: String
 
@@ -19,7 +19,7 @@ public struct FunctionsErrorCode: Error {
   }
 }
 
-extension FunctionsErrorCode: RawRepresentable {
+extension FirebaseFunctionsErrorCode: RawRepresentable {
   public typealias RawValue = Int
 
   public init(rawValue: Int) {
@@ -28,7 +28,7 @@ extension FunctionsErrorCode: RawRepresentable {
   }
 }
 
-extension FunctionsErrorCode {
+extension FirebaseFunctionsErrorCode {
   init(_ error: firebase.functions.Error, errorMessage: String?) {
     self.init((code: error.rawValue, message: errorMessage ?? "\(error.rawValue)"))
   }
@@ -43,7 +43,7 @@ extension FunctionsErrorCode {
   }
 }
 
-extension FunctionsErrorCode {
+extension FirebaseFunctionsErrorCode {
   public static var none: Self { .init(firebase.functions.kErrorNone) }
   public static var cancelled: Self { .init(firebase.functions.kErrorCancelled) }
   public static var unknown: Self { .init(firebase.functions.kErrorUnknown) }
@@ -63,11 +63,11 @@ extension FunctionsErrorCode {
   public static var dataLoss: Self { .init(firebase.functions.kErrorDataLoss) }
 }
 
-extension FunctionsErrorCode: Equatable {}
+extension FirebaseFunctionsErrorCode: Equatable {}
 
-extension FunctionsErrorCode {
+extension FirebaseFunctionsErrorCode {
   // The Obj C API provides this type as well, so provide it here for consistency.
-  public typealias Code = FunctionsErrorCode
+  public typealias Code = FirebaseFunctionsErrorCode
 
   // This allows us to re-expose self as a code similarly
   // to what the Firebase SDK does when it creates the
