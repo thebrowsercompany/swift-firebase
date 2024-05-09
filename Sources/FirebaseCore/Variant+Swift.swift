@@ -33,9 +33,6 @@ public func toVariant(_ object: Any?) throws -> firebase.Variant {
 public func fromVariant(_ variant: firebase.Variant) throws -> Any? {
   if variant.is_bool() {
     return swift_firebase.swift_cxx_shims.firebase.variant_bool_value(variant)
-  } else if variant.is_map() {
-    // XXX
-    return nil
   } else if variant.is_null() {
     return nil
   } else {
