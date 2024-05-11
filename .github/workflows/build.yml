@@ -34,7 +34,7 @@ jobs:
           version: tags/20240511.0
           file: firebase-windows-amd64.zip
 
-      - run: Expand-Archive -Path firebase-windows-amd64.zip -DestinationPath third_party/firebase-development
+      - run: Expand-Archive -PassThru -Path firebase-windows-amd64.zip -DestinationPath third_party/firebase-development
         shell: powershell
 
       - name: Build
