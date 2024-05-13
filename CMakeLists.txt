@@ -208,6 +208,7 @@ target_compile_options(FirebaseFunctions PRIVATE
   -cxx-interoperability-mode=default)
 target_link_libraries(FirebaseFunctions PUBLIC
   firebase
+  firebase_functions
   FirebaseCore)
 target_link_libraries(FirebaseFunctions PRIVATE
   firebase_rest_lib)
