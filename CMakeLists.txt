@@ -199,8 +199,8 @@ target_link_libraries(FirebaseFirestore PUBLIC
   zlibstatic)
 
 add_library(FirebaseFunctions SHARED
+  Sources/FirebaseFunctions/FirebaseFunctionsErrorCode.swift
   Sources/FirebaseFunctions/Functions+Swift.swift
-  Sources/FirebaseFunctions/FunctionsErrorCode.swift
   Sources/FirebaseFunctions/HTTPSCallable+Swift.swift
   Sources/FirebaseFunctions/HTTPSCallableResult+Swift.swift)
 target_compile_options(FirebaseFunctions PRIVATE
