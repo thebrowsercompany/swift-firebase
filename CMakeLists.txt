@@ -53,7 +53,8 @@ add_library(FirebaseCore SHARED
   Sources/FirebaseCore/FirebaseConfiguration.swift
   Sources/FirebaseCore/FirebaseLogging+Swift.swift
   Sources/FirebaseCore/FirebaseOptions+Swift.swift
-  Sources/FirebaseCore/FutureProtocol.swift)
+  Sources/FirebaseCore/FutureProtocol.swift
+  Sources/FirebaseCore/Variant+Swift.swift)
 target_compile_options(FirebaseCore PRIVATE
   -cxx-interoperability-mode=default)
 target_link_libraries(FirebaseCore PUBLIC
