@@ -211,7 +211,12 @@ target_link_libraries(FirebaseFunctions PUBLIC
   firebase_functions
   FirebaseCore)
 target_link_libraries(FirebaseFunctions PRIVATE
-  firebase_rest_lib)
+  crypto
+  firebase_rest_lib
+  flatbuffers
+  libcurl
+  ssl
+  zlibstatic)
 
 if(SWIFT_FIREBASE_BUILD_EXAMPLES)
   FetchContent_Declare(SwiftWin32
