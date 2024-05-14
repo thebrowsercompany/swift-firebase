@@ -10,6 +10,10 @@ import CxxShim
 public class StorageMetadata {
   let impl: firebase.storage.Metadata
 
+  init(_ impl: firebase.storage.Metadata) {
+    self.impl = impl
+  }
+
   public init() {
     self.impl = .init()
   }

@@ -46,4 +46,28 @@ public class StorageReference {
       completion(result.flatMap { .init(string: String($0)) }, error)
     })
   }
+
+  public func putDataAsync(
+    _ uploadData: Data,
+    metadata: StorageMetadata? = nil,
+    onProgress: ((Progress?) -> Void)? = nil
+  ) async throws -> StorageMetadata {
+    try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<StorageMetadata, any Error>) in
+      uploadData.withUnsafeBytes { ptr in
+        let future = swift_firebase.swift_cxx_shims.firebase.storage.storage_reference_put_bytes(
+          self.impl, ptr.baseAddress!.assumingMemoryBound(to: UInt8.self), uploadData.count
+          // XXX support `metadata`
+          // XXX support `onProgress`
+        )
+        future.setCompletion({
+          let (result, error) = future.resultAndError { StorageErrorCode($0) }
+          if let error {
+            continuation.resume(throwing: error)
+          } else {
+            continuation.resume(returning: result.map { .init($0) } ?? .init())
+          }
+        })
+      }
+    }
+  }
 }

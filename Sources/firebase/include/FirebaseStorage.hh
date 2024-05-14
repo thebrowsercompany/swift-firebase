@@ -34,6 +34,12 @@ storage_reference_get_download_url(::firebase::storage::StorageReference ref) {
   return ref.GetDownloadUrl();
 }
 
+inline ::swift_firebase::swift_cxx_shims::firebase::Future<::firebase::storage::Metadata>
+storage_reference_put_bytes(::firebase::storage::StorageReference ref,
+                            const void* buffer, size_t buffer_size) {
+  return ref.PutBytes(buffer, buffer_size);
+}
+
 typedef std::map<std::string, std::string> CustomMetadata;
 
 inline CustomMetadata
