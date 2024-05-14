@@ -29,31 +29,43 @@ storage_get_reference(const StorageRef& ref, const char* path) {
   return ref->GetReference(path);
 }
 
-/*
-inline ::firebase::functions::HttpsCallableReference
-functions_get_https_callable(StorageRef ref, const char* name) {
-  return ref.get()->GetHttpsCallable(name);
-}
-
-inline ::swift_firebase::swift_cxx_shims::firebase::Future<
-    ::firebase::functions::HttpsCallableResult>
-https_callable_call(::firebase::functions::HttpsCallableReference ref) {
-  return ref.Call();
-}
-*/
-
 inline ::swift_firebase::swift_cxx_shims::firebase::Future<::std::string>
 storage_reference_get_download_url(::firebase::storage::StorageReference ref) {
   return ref.GetDownloadUrl();
 }
 
-/*
-inline ::firebase::Variant
-https_callable_result_data(
-    const ::firebase::functions::HttpsCallableResult& result) {
-  return result.data();
+typedef std::map<std::string, std::string> CustomMetadata;
+
+inline CustomMetadata
+metadata_get_custom_metadata(const ::firebase::storage::Metadata& metadata) {
+  return *metadata.custom_metadata();
 }
-*/
+
+inline CustomMetadata::const_iterator
+custom_metadata_begin(const CustomMetadata& custom_metadata) {
+  return custom_metadata.begin();
+}
+
+inline CustomMetadata::const_iterator
+custom_metadata_end(const CustomMetadata& custom_metadata) {
+  return custom_metadata.end();
+}
+
+inline bool
+custom_metadata_iterators_equal(const CustomMetadata::const_iterator& a,
+                                const CustomMetadata::const_iterator& b) {
+  return a == b;
+}
+
+inline const std::string&
+custom_metadata_iterator_first(const CustomMetadata::const_iterator& it) {
+  it->first;
+}
+
+inline const std::string&
+custom_metadata_iterator_second(const CustomMetadata::const_iterator& it) {
+  it->second;
+}
 
 } // namespace swift_firebase::swift_cxx_shims::firebase::functions
 
