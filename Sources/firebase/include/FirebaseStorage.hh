@@ -67,6 +67,18 @@ custom_metadata_iterator_second(const CustomMetadata::const_iterator& it) {
   it->second;
 }
 
+inline void
+metadata_clear_custom_metadata(const ::firebase::storage::Metadata& metadata) {
+  metadata.custom_metadata()->clear();
+}
+
+inline void
+metadata_insert_custom_metadata(const ::firebase::storage::Metadata& metadata,
+                                const std::string& key,
+                                const std::string& value) {
+  (*metadata.custom_metadata())[key] = value;
+}
+
 } // namespace swift_firebase::swift_cxx_shims::firebase::functions
 
 #endif

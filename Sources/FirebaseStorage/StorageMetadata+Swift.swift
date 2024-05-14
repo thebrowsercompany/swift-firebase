@@ -19,9 +19,15 @@ public class StorageMetadata {
       let map = swift_firebase.swift_cxx_shims.firebase.storage.metadata_get_custom_metadata(impl)
       return map.toDict()
     }
-    //set {
-    //  swift_firebase.swift_cxx_shims.firebase.storage.set_custom_metadata(impl, newValue)
-    //}
+    set {
+      swift_firebase.swift_cxx_shims.firebase.storage.metadata_clear_custom_metadata(impl)
+      guard let newValue else { return }
+      for (key, value) in newValue {
+        swift_firebase.swift_cxx_shims.firebase.storage.metadata_insert_custom_metadata(
+          impl, std.string(key), std.string(value)
+        )
+      }
+    }
   }
 }
 
