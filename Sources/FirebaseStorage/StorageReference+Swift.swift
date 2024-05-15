@@ -52,13 +52,24 @@ public class StorageReference {
     metadata: StorageMetadata? = nil,
     onProgress: ((Progress?) -> Void)? = nil
   ) async throws -> StorageMetadata {
-    try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<StorageMetadata, any Error>) in
-      uploadData.withUnsafeBytes { ptr in
-        let future = swift_firebase.swift_cxx_shims.firebase.storage.storage_reference_put_bytes(
-          self.impl, ptr.baseAddress!.assumingMemoryBound(to: UInt8.self), uploadData.count
-          // XXX support `metadata`
-          // XXX support `onProgress`
-        )
+    // TODO(PRENG-63978): Add support for `onProgress` callback.
+    assert(onProgress == nil, "Missing support for non-nil onProgress")
+    let controller = ControllerRef()
+    return try await withTaskCancellationHandler {
+      try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<StorageMetadata, any Error>) in
+        let future = uploadData.withUnsafeBytes { ptr in
+          let bytes = ptr.baseAddress!.assumingMemoryBound(to: UInt8.self)
+          let numBytes = uploadData.count
+          if let metadata {
+            return swift_firebase.swift_cxx_shims.firebase.storage.storage_reference_put_bytes(
+              self.impl, bytes, numBytes, metadata.impl, &controller.impl
+            )
+          } else {
+            return swift_firebase.swift_cxx_shims.firebase.storage.storage_reference_put_bytes(
+              self.impl, bytes, numBytes, &controller.impl
+            )
+          }
+        }
         future.setCompletion({
           let (result, error) = future.resultAndError { StorageErrorCode($0) }
           if let error {
@@ -68,6 +79,13 @@ public class StorageReference {
           }
         })
       }
+    } onCancel: {
+      controller.impl.Cancel()
     }
   }
+}
+
+// The underlying `firebase.storage.Controller` type is thread-safe.
+private class ControllerRef: @unchecked Sendable {
+  var impl: firebase.storage.Controller = .init()
 }
