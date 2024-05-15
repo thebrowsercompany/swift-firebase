@@ -35,7 +35,7 @@ public class StorageMetadata {
   }
 }
 
-extension swift_firebase.swift_cxx_shims.firebase.storage.CustomMetadata {
+private extension swift_firebase.swift_cxx_shims.firebase.storage.CustomMetadata {
   borrowing func toDict() -> [String: String] {
     var result = [String: String]()
     var iterator = swift_firebase.swift_cxx_shims.firebase.storage.custom_metadata_begin(self)
