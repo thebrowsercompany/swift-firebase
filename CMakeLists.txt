@@ -221,6 +221,7 @@ target_link_libraries(FirebaseFunctions PRIVATE
 add_library(FirebaseStorage SHARED
   Sources/FirebaseStorage/StorageErrorCode.swift
   Sources/FirebaseStorage/Storage+Swift.swift
+  Sources/FirebaseStorage/StorageMetadata+Swift.swift
   Sources/FirebaseStorage/StorageReference+Swift.swift)
 target_compile_options(FirebaseStorage PRIVATE
   -cxx-interoperability-mode=default)
