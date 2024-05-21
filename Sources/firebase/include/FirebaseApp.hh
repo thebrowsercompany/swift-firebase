@@ -3,7 +3,7 @@
 #ifndef firebase_include_FirebaseApp_hh
 #define firebase_include_FirebaseApp_hh
 
-#include <iostream>
+#include <stdio.h>
 
 #include <firebase/app.h>
 #include <firebase/log.h>
@@ -22,7 +22,7 @@ void LogSetCallback(LogCallback callback, void* callback_data);
 namespace swift_firebase::swift_cxx_shims::firebase::app {
 
 void LogPrint(::firebase::LogLevel log_level, const char* log_message, void* callback_data) {
-  std::cout << ">>> firebase log: " << log_message << std::endl;
+  printf(">>> firebase log: %s\n", log_message);
 }
 
 inline void
