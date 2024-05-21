@@ -3,6 +3,8 @@
 @_exported
 import firebase
 
+import CxxShim
+
 #if os(Android)
 private import FirebaseAndroid
 #endif
@@ -43,7 +45,9 @@ extension FirebaseApp {
   }
 
   public static func app(name: String) -> FirebaseApp? {
-    firebase.App.GetInstance(name)
+    swift_firebase.swift_cxx_shims.firebase.app.hook_firebase_log()
+    return firebase.App.GetInstance(name)
+
   }
 
   public static var allApps: [String:FirebaseApp]? {
