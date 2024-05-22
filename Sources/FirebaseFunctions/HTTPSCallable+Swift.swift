@@ -9,7 +9,7 @@ import CxxShim
 import Foundation
 
 public class HTTPSCallable {
-  let impl: firebase.functions.HttpsCallableReference
+  var impl: firebase.functions.HttpsCallableReference
 
   init(_ impl: firebase.functions.HttpsCallableReference) {
     self.impl = impl
@@ -37,7 +37,7 @@ public class HTTPSCallable {
 
   private func callImpl(data: Any?, completion: @escaping (HTTPSCallableResult?, Error?) -> Void) {
     let variant = try! toVariant(data)
-    let future = swift_firebase.swift_cxx_shims.firebase.functions.https_callable_call(impl, variant)
+    let future = swift_firebase.swift_cxx_shims.firebase.functions.https_callable_call(&impl, variant)
     future.setCompletion({
       let (result, error) = future.resultAndError { FunctionsErrorCode($0) }
       completion(result.map { .init($0) }, error)

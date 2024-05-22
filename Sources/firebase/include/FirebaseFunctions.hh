@@ -30,15 +30,17 @@ functions_get_https_callable(FunctionsRef ref, const char* name) {
   return ref.get()->GetHttpsCallable(name);
 }
 
+// TODO(WPP-2267): Pass HttpsCallableReference by value instead.
 inline ::swift_firebase::swift_cxx_shims::firebase::Future<
     ::firebase::functions::HttpsCallableResult>
-https_callable_call(::firebase::functions::HttpsCallableReference ref) {
+https_callable_call(::firebase::functions::HttpsCallableReference& ref) {
   return ref.Call();
 }
 
+// TODO(WPP-2267): Pass HttpsCallableReference by value instead.
 inline ::swift_firebase::swift_cxx_shims::firebase::Future<
     ::firebase::functions::HttpsCallableResult>
-https_callable_call(::firebase::functions::HttpsCallableReference ref,
+https_callable_call(::firebase::functions::HttpsCallableReference& ref,
                     const ::firebase::Variant& data) {
   return ref.Call(data);
 }
