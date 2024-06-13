@@ -60,12 +60,13 @@ target_compile_options(FirebaseCore PRIVATE
 target_link_libraries(FirebaseCore PUBLIC
   firebase)
 target_link_libraries(FirebaseCore PRIVATE
-  libcurl
+  #libcurl
   firebase_app
   flatbuffers
-  zlibstatic)
+  #zlibstatic
+)
 if(ANDROID)
-  target_link_libraries(FirebaseCore PRIVATE
+  target_link_libraries(FirebaseCore PUBLIC
     FirebaseAndroidJNI)
 endif()
 
