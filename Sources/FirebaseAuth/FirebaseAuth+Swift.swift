@@ -23,7 +23,11 @@ public final class Auth {
   }
 
   public var app: FirebaseApp? {
+#if os(Android)
+    impl.pointee.app()
+#else
     impl.pointee.__appUnsafe()
+#endif
   }
 
   public var currentUser: User? {
