@@ -7,6 +7,8 @@ import firebase
 private import FirebaseAndroid
 #endif
 
+import Foundation
+
 public typealias FirebaseApp = UnsafeMutablePointer<firebase.App>
 
 extension FirebaseApp {
@@ -34,7 +36,12 @@ extension FirebaseApp {
                             SwiftFirebase_GetJavaEnvironment(),
                             SwiftFirebase_GetActivity())
 #else
-    _ = firebase.App.Create(options.pointee, name)
+    let app = firebase.App.Create(options.pointee, name)
+    guard app != nil else {
+      fatalError("Failed to create FirebaseApp with name '\(name)'")
+    }
+    print("*****STEVEOOOO: Created FirebaseApp with name '\(name)'")
+    fflush(stdout)
 #endif
   }
 
