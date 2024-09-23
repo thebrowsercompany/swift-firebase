@@ -8,7 +8,9 @@ target_link_libraries(FirebaseAndroidJNI PRIVATE
   log
   JNI::JNI)
 
-add_jar(SwiftFirebase
-          Native.java
-        INCLUDE_JARS
-          $ENV{ANDROID_SDK_ROOT}/platforms/android-${CMAKE_ANDROID_API}/android.jar)
+if (SWIFT_FIREBASE_BUILD_ANDROID_JAVA_NATIVE)
+  add_jar(SwiftFirebase
+            Native.java
+          INCLUDE_JARS
+            $ENV{ANDROID_SDK_ROOT}/platforms/android-${CMAKE_ANDROID_API}/android.jar)
+endif()

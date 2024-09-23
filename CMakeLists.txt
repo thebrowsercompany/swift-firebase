@@ -18,6 +18,7 @@ set(CMAKE_Swift_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/swift)
 include(FetchContent)
 
 option(SWIFT_FIREBASE_BUILD_EXAMPLES "Build example UI" TRUE)
+option(SWIFT_FIREBASE_BUILD_ANDROID_JAVA_NATIVE "Build android Native class for swift-firebase jni interop" TRUE)
 
 # ${TOOLCHAIN_ROOT}/usr/include allows us to access swift C++ interop headers.
 cmake_path(GET CMAKE_Swift_COMPILER PARENT_PATH _SWIFT_INCLUDE_DIR)
@@ -284,4 +285,19 @@ if(SWIFT_FIREBASE_BUILD_EXAMPLES)
     COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${CMAKE_CURRENT_SOURCE_DIR}/Examples/FireBaseUI/Resources $<TARGET_FILE_DIR:FireBaseUI>/Resources
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/Examples/FireBaseUI/Info.plist $<TARGET_FILE_DIR:FireBaseUI>/Info.plist
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/Examples/FireBaseUI/$<TARGET_FILE_NAME:FireBaseUI>.manifest $<TARGET_FILE_DIR:FireBaseUI>/$<TARGET_FILE_NAME:FireBaseUI>.manifest)
+endif()
+
+if (ANDROID)
+  install(
+      TARGETS 
+          FirebaseAndroidJNI
+          FirebaseCore
+          FirebaseAuth
+          FirebaseFirestore
+          FirebaseFunctions
+          FirebaseStorage
+      LIBRARY DESTINATION lib
+      ARCHIVE DESTINATION lib
+      RUNTIME DESTINATION bin
+  )
 endif()

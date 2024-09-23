@@ -8,24 +8,32 @@
 
 static JavaVM *g_VM;
 static JNIEnv *g_Env;
-static jobject *g_Activity;
+static jobject g_Activity;
 
 #define N_ELEMENTS(array) (sizeof((array)) / sizeof(*(array)))
 
 static const char kClassPath[] = "company/thebrowser/Native";
 
 static jboolean
-SwiftFirebase_RegisterActivity(JNIEnv *env, jobject *this, jobject *activity)
+SwiftFirebase_RegisterActivity(JNIEnv *env, jobject *this, jobject activity)
 {
   assert(g_Activity == NULL && "re-registeration of activity");
   if (g_Activity) return JNI_FALSE;
 
-  g_Activity = activity;
+  g_Activity = (*env)->NewGlobalRef(env, activity);
+
+  if (g_Activity == NULL) {
+      // Failed to create global reference
+      __android_log_print(ANDROID_LOG_ERROR, "swift-firebase", "Failed to create global reference to Activity");
+      return JNI_FALSE;
+  }
+
+  __android_log_print(ANDROID_LOG_INFO, "swift-firebase", "Successfully registered Activity");
   return JNI_TRUE;
 }
 
 static JNINativeMethod kMethods[] = {
-  { "RegisterActivity", "()Z", SwiftFirebase_RegisterActivity },
+  { "RegisterActivity", "(Landroid/app/Activity;)Z", SwiftFirebase_RegisterActivity },
 };
 
 static void
@@ -63,7 +71,7 @@ FIREBASE_ANDROID_ABI
 jobject SwiftFirebase_GetActivity(void)
 {
   assert(g_Activity && "`GetActivity` invoked before `RegisterActivity`");
-  return *g_Activity;
+  return g_Activity;
 }
 
 FIREBASE_ANDROID_ABI
