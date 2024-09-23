@@ -304,7 +304,7 @@ extension User: UserInfo {
   }
 }
 
-
+/*
 import FirebaseCore
 import FirebaseAuth
 import FirebaseFirestore
@@ -422,3 +422,4 @@ public func tryFirebaseSigninAndFetch(_ env: UnsafeMutablePointer<JNIEnv>, _ thi
   }
   debugLog("returned from direct jni call to test firebase interop")
 }
+*/
