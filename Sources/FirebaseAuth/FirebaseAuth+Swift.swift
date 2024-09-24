@@ -23,7 +23,12 @@ public final class Auth {
   }
 
   public var app: FirebaseApp? {
-    impl.pointee.__appUnsafe()
+    let p = impl.pointee.__appUnsafe()
+#if os(Android)
+    return FirebaseApp(p)
+#else
+    return p
+#endif
   }
 
   public var currentUser: User? {
@@ -61,11 +66,19 @@ public final class Auth {
     guard let application = firebase.App.GetInstance() else {
       fatalError("no default application")
     }
+#if os(Android)
+    return auth(app: FirebaseApp(application))
+#else
     return auth(app: application)
+#endif
   }
 
   public static func auth(app: FirebaseApp) -> Auth {
+#if os(Android)
+    .init(firebase.auth.Auth.GetAuth(app.pointer, nil))
+#else
     .init(firebase.auth.Auth.GetAuth(app, nil))
+#endif
   }
 
   public func updateCurrentUser(_ user: User, completion: ((Error?) -> Void)?) {

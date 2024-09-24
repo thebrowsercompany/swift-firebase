@@ -15,7 +15,12 @@ public class Storage {
   }
 
   public static func storage(app: FirebaseApp) -> Storage {
-    let instance = swift_firebase.swift_cxx_shims.firebase.storage.storage_get_instance(app)
+#if os(Android)
+    let appp = app.pointer
+#else
+    let appp = app
+#endif
+    let instance = swift_firebase.swift_cxx_shims.firebase.storage.storage_get_instance(appp)
     guard swift_firebase.swift_cxx_shims.firebase.storage.storage_is_valid(instance) else {
       fatalError("Invalid Storage Instance")
     }

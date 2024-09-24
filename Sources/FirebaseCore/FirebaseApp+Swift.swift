@@ -7,7 +7,29 @@ import firebase
 private import FirebaseAndroid
 #endif
 
+#if os(Android)
+public struct FirebaseApp {
+  public init(_ p: UnsafeMutablePointer<firebase.App>) {
+    self.pointer = p
+  }
+
+  @_alwaysEmitIntoClient
+  public var pointee: firebase.App {
+    @_transparent unsafeAddress {
+      return UnsafePointer<firebase.App>(pointer)
+    }
+    @_transparent unsafeMutableAddress {
+      return pointer
+    }
+  }
+
+  public var pointer: UnsafeMutablePointer<firebase.App>
+}
+#else
+
 public typealias FirebaseApp = UnsafeMutablePointer<firebase.App>
+
+#endif
 
 extension FirebaseApp {
   public static func configure() {
@@ -39,19 +61,32 @@ extension FirebaseApp {
   }
 
   public static func app() -> FirebaseApp? {
+#if os(Android)
+    firebase.App.GetInstance().flatMap(FirebaseApp.init)
+#else
     firebase.App.GetInstance()
+#endif
   }
 
   public static func app(name: String) -> FirebaseApp? {
+#if os(Android)
+    firebase.App.GetInstance(name).flatMap(FirebaseApp.init)
+#else
     firebase.App.GetInstance(name)
+#endif
   }
 
   public static var allApps: [String:FirebaseApp]? {
     let applications = firebase.App.GetApps()
     guard !applications.isEmpty else { return nil }
-    return .init(uniqueKeysWithValues: applications.compactMap {
-        guard let application = $0 else { return nil }
+    return .init(uniqueKeysWithValues: applications.compactMap { (app: UnsafeMutablePointer<firebase.App>?) -> (String, FirebaseApp)? in
+        guard let application = app else { return nil }
+  #if os(Android)
+        let app = FirebaseApp(application)
+        return (app.name, app)
+  #else
         return (application.name, application)
+  #endif
     })
   }
 

@@ -24,13 +24,23 @@ public class Firestore {
       fatalError("no default application")
     }
 
+#if os(Android)
+    return firestore(app: FirebaseApp(application))
+#else
     return firestore(app: application)
+#endif
   }
 
   public static func firestore(app: FirebaseApp) -> Firestore {
+#if os(Android)
+    guard let instance = firebase.firestore.Firestore.GetInstance(app.pointer, nil) else {
+      fatalError("Invalid Firestore Instance")
+    }
+#else
     guard let instance = firebase.firestore.Firestore.GetInstance(app, nil) else {
       fatalError("Invalid Firestore Instance")
     }
+#endif
 
     return .init(instance)
   }

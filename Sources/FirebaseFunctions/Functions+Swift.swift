@@ -15,7 +15,12 @@ public class Functions {
   }
 
   public static func functions(app: FirebaseApp) -> Functions {
-    let instance = swift_firebase.swift_cxx_shims.firebase.functions.functions_get_instance(app)
+#if os(Android)
+    let appp = app.pointer
+#else
+    let appp = app
+#endif
+    let instance = swift_firebase.swift_cxx_shims.firebase.functions.functions_get_instance(appp)
     guard swift_firebase.swift_cxx_shims.firebase.functions.functions_is_valid(instance) else {
       fatalError("Invalid Functions Instance")
     }
